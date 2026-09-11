@@ -7,10 +7,10 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 | Model | Params | Rec. quant | Weights | KV @ 8K | Fit | tok/s (est.) |
 | --- | --- | --- | --- | --- | --- | --- |
 | [Qwen2.5-VL-7B](../models/vision.md) | 7B | Q8_0 | 8.7 GB | 0.9 GB | Full | 45-70 |
-| [Qwen2.5-VL-32B](../models/vision.md) | 32B | Q4_K_M | 19.0 GB | 4.0 GB | Offload | 12-22 |
-| [Llama 3.2 11B Vision](../models/vision.md) | 11B | Q6_K | 9.5 GB | 1.25 GB | Full | 35-55 |
-| [MiniCPM-V 2.6](../models/vision.md) | 8B | Q8_0 | 9.0 GB | 0.9 GB | Full | 45-70 |
-| [Gemma 3 27B](../models/vision.md) | 27B | Q4_K_M | 16.0 GB | 3.9 GB | Tight | 18-30 |
+| [Qwen2.5-VL-32B](../models/vision.md) | 32B | Q4_K_M | 19 GB | 4 GB | Offload | 12-22 |
+| [Llama 3.2 11B Vision](../models/vision.md) | 11B | Q6_K | 9.5 GB | 1.3 GB | Full | 35-55 |
+| [MiniCPM-V 2.6](../models/vision.md) | 8B | Q8_0 | 9 GB | 0.9 GB | Full | 45-70 |
+| [Gemma 3 27B](../models/vision.md) | 27B | Q4_K_M | 16 GB | 3.9 GB | Tight | 18-30 |
 
 ## Models
 
@@ -31,8 +31,8 @@ Compact vision-language model strong at documents, charts, and grounding.
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| Q4_K_M | 5.0 GB | Light and fast. |
-| Q6_K | 7.0 GB | Balanced. |
+| Q4_K_M | 5 GB | Light and fast. |
+| Q6_K | 7 GB | Balanced. |
 | Q8_0 | 8.7 GB | Recommended. |
 
 **Run it:**
@@ -81,7 +81,7 @@ Large vision-language model with top-tier document and chart reasoning.
 | Quant | Weights | Notes |
 | --- | --- | --- |
 | Q3_K_M | 15.5 GB | Near-resident. |
-| Q4_K_M | 19.0 GB | Recommended; moderate offload. |
+| Q4_K_M | 19 GB | Recommended; moderate offload. |
 
 **Run it:**
 
@@ -130,7 +130,7 @@ Meta's 11B multimodal model for image reasoning and captioning.
 | --- | --- | --- |
 | Q4_K_M | 6.8 GB | Light. |
 | Q6_K | 9.5 GB | Recommended. |
-| Q8_0 | 12.0 GB | Fits with a modest context. |
+| Q8_0 | 12 GB | Fits with a modest context. |
 
 **Run it:**
 
@@ -179,7 +179,7 @@ Compact vision model that excels at OCR and multi-image understanding.
 | --- | --- | --- |
 | Q4_K_M | 5.5 GB | Very light. |
 | Q6_K | 7.4 GB | Balanced. |
-| Q8_0 | 9.0 GB | Recommended for OCR. |
+| Q8_0 | 9 GB | Recommended for OCR. |
 
 **Run it:**
 
@@ -227,7 +227,7 @@ Google's 27B multimodal model with a 128K context and strong reasoning.
 | Quant | Weights | Notes |
 | --- | --- | --- |
 | Q3_K_M | 13.5 GB | Fully resident option. |
-| Q4_K_M | 16.0 GB | Very tight; short context. |
+| Q4_K_M | 16 GB | Very tight; short context. |
 
 **Run it:**
 

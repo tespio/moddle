@@ -6,13 +6,13 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 
 | Model | Params | Rec. quant | Weights | KV @ 8K | Fit | tok/s (est.) |
 | --- | --- | --- | --- | --- | --- | --- |
-| [Qwen3-14B](../models/chat.md) | 14B | Q5_K_M | 10.5 GB | 1.25 GB | Full | 35-55 |
-| [Mistral Small 3.1 24B](../models/chat.md) | 24B | Q4_K_M | 14.0 GB | 1.25 GB | Tight | 28-40 |
-| [Gemma 3 12B](../models/chat.md) | 12B | Q6_K | 10.2 GB | 3.0 GB | Full | 40-60 |
-| [gpt-oss-20b](../models/chat.md) | 21B (3.6B active) | MXFP4 | 13.0 GB | 0.8 GB | Full | 70-110 |
+| [Qwen3-14B](../models/chat.md) | 14B | Q5_K_M | 10.5 GB | 1.3 GB | Full | 35-55 |
+| [Mistral Small 3.1 24B](../models/chat.md) | 24B | Q4_K_M | 14 GB | 1.3 GB | Tight | 28-40 |
+| [Gemma 3 12B](../models/chat.md) | 12B | Q6_K | 10.2 GB | 3 GB | Full | 40-60 |
+| [gpt-oss-20b](../models/chat.md) | 21B (3.6B active) | MXFP4 | 13 GB | 0.8 GB | Full | 70-110 |
 | [Qwen3-30B-A3B](../models/chat.md) | 30B (3B active) | Q4_K_M | 17.5 GB | 1.5 GB | Offload | 60-100 |
-| [DeepSeek-R1-Distill-Qwen-14B](../models/chat.md) | 14B | Q5_K_M | 10.5 GB | 1.25 GB | Full | 35-55 |
-| [Llama 3.1 8B](../models/chat.md) | 8B | Q8_0 | 8.5 GB | 2.0 GB | Full | 60-90 |
+| [DeepSeek-R1-Distill-Qwen-14B](../models/chat.md) | 14B | Q5_K_M | 10.5 GB | 1.3 GB | Full | 35-55 |
+| [Llama 3.1 8B](../models/chat.md) | 8B | Q8_0 | 8.5 GB | 2 GB | Full | 60-90 |
 
 ## Models
 
@@ -36,7 +36,7 @@ Dense 14B generalist with switchable thinking mode and strong multilingual and r
 | Q4_K_M | 8.5 GB | Fastest, small quality drop. |
 | Q5_K_M | 10.5 GB | Sweet spot. Fits with 32K context. |
 | Q6_K | 12.2 GB | Near-lossless; still fully resident. |
-| Q8_0 | 15.0 GB | Tight; use short contexts or light offload. |
+| Q8_0 | 15 GB | Tight; use short contexts or light offload. |
 
 **Run it:**
 
@@ -83,7 +83,7 @@ vllm serve Qwen/Qwen3-14B --max-model-len 32768
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| Q4_K_M | 14.0 GB | Fits fully with ~8-16K context. |
+| Q4_K_M | 14 GB | Fits fully with ~8-16K context. |
 | Q4_K_S | 13.2 GB | More context headroom. |
 | Q5_K_M | 16.5 GB | Needs light offload. |
 
@@ -181,8 +181,8 @@ OpenAI's open-weight MoE designed to run in ~16 GB with MXFP4 and a 128K context
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| MXFP4 | 13.0 GB | Native format. Fits with long context. |
-| Q8_0 | 22.0 GB | Offload required. |
+| MXFP4 | 13 GB | Native format. Fits with long context. |
+| Q8_0 | 22 GB | Offload required. |
 
 **Run it:**
 
@@ -231,7 +231,7 @@ MoE with only 3B active parameters, giving 30B-class quality at small-model spee
 | --- | --- | --- |
 | Q4_K_M | 17.5 GB | Slight offload; still very fast. |
 | Q3_K_M | 14.5 GB | Fits fully; small quality cost. |
-| Q5_K_M | 21.0 GB | More offload, higher quality. |
+| Q5_K_M | 21 GB | More offload, higher quality. |
 
 **Run it:**
 
@@ -329,7 +329,7 @@ The dependable 8B baseline with a 128K context and a huge ecosystem.
 | --- | --- | --- |
 | Q4_K_M | 4.9 GB | Ultra light and fast. |
 | Q8_0 | 8.5 GB | Recommended. Near-lossless. |
-| FP16 | 16.0 GB | Exactly at the limit; not worth it. |
+| FP16 | 16 GB | Exactly at the limit; not worth it. |
 
 **Run it:**
 

@@ -6,8 +6,8 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 
 | Model | Params | Rec. quant | Weights | KV @ 8K | Fit | tok/s (est.) |
 | --- | --- | --- | --- | --- | --- | --- |
-| [Whisper large-v3-turbo](../models/voice.md) | 809M | int8 | 2.0 GB | - | Full | - |
-| [Whisper large-v3](../models/voice.md) | 1.55B | int8 | 3.0 GB | - | Full | - |
+| [Whisper large-v3-turbo](../models/voice.md) | 809M | int8 | 2 GB | - | Full | - |
+| [Whisper large-v3](../models/voice.md) | 1.55B | int8 | 3 GB | - | Full | - |
 | [Kokoro-82M](../models/voice.md) | 82M | fp16 | 0.5 GB | - | Full | - |
 | [XTTS-v2](../models/voice.md) | 467M | fp16 | 2.5 GB | - | Full | - |
 | [Chatterbox](../models/voice.md) | 500M | fp16 | 2.5 GB | - | Full | - |
@@ -29,8 +29,8 @@ Distilled Whisper with near-large accuracy at 8x the speed.
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| int8 | 2.0 GB | Recommended. |
-| fp16 | 3.0 GB | Slightly better accuracy. |
+| int8 | 2 GB | Recommended. |
+| fp16 | 3 GB | Slightly better accuracy. |
 
 **Run it:**
 
@@ -63,8 +63,8 @@ The reference open speech-to-text model with strong multilingual accuracy.
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| int8 | 3.0 GB | Recommended. |
-| fp16 | 5.0 GB | Higher accuracy. |
+| int8 | 3 GB | Recommended. |
+| fp16 | 5 GB | Higher accuracy. |
 
 **Run it:**
 

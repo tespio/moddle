@@ -9,9 +9,9 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 | [SDXL / SDXL-Turbo](../models/image-generation.md) | 3.5B (UNet+text encoders) | fp16 | 7.5 GB | - | Full | - |
 | [FLUX.1 [schnell]](../models/image-generation.md) | 12B | fp8 | 11.5 GB | - | Full | - |
 | [FLUX.1 [dev]](../models/image-generation.md) | 12B | GGUF Q8 | 12.5 GB | - | Tight | - |
-| [Stable Diffusion 3.5 Medium](../models/image-generation.md) | 2.5B | fp16 | 9.0 GB | - | Full | - |
-| [Wan 2.1 T2V-1.3B](../models/image-generation.md) | 1.3B | fp16 | 8.0 GB | - | Full | - |
-| [LTX-Video 2B](../models/image-generation.md) | 2B | fp16 | 8.0 GB | - | Full | - |
+| [Stable Diffusion 3.5 Medium](../models/image-generation.md) | 2.5B | fp16 | 9 GB | - | Full | - |
+| [Wan 2.1 T2V-1.3B](../models/image-generation.md) | 1.3B | fp16 | 8 GB | - | Full | - |
+| [LTX-Video 2B](../models/image-generation.md) | 2B | fp16 | 8 GB | - | Full | - |
 
 ## Models
 
@@ -66,7 +66,7 @@ Distilled 4-step FLUX variant with excellent prompt following and text rendering
 | --- | --- | --- |
 | fp8 | 11.5 GB | Recommended. |
 | GGUF Q8 | 12.5 GB | ComfyUI GGUF nodes. |
-| GGUF Q4 | 7.0 GB | Lighter, slight quality loss. |
+| GGUF Q4 | 7 GB | Lighter, slight quality loss. |
 
 **Run it:**
 
@@ -101,7 +101,7 @@ The flagship open FLUX model with the best prompt adherence and realism.
 | --- | --- | --- |
 | fp8 | 13.5 GB | Tight but works at 1024px. |
 | GGUF Q8 | 12.5 GB | Recommended. |
-| GGUF Q4 | 7.0 GB | Most headroom. |
+| GGUF Q4 | 7 GB | Most headroom. |
 
 **Run it:**
 
@@ -134,8 +134,8 @@ Balanced MMDiT model optimized for consumer hardware at 1024px.
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| fp16 | 9.0 GB | Recommended. |
-| fp8 | 6.0 GB | Lighter. |
+| fp16 | 9 GB | Recommended. |
+| fp8 | 6 GB | Lighter. |
 
 **Run it:**
 
@@ -168,7 +168,7 @@ Lightweight text-to-video model that can run on consumer GPUs.
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| fp16 | 8.0 GB | 480p, few-second clips. |
+| fp16 | 8 GB | 480p, few-second clips. |
 
 **Run it:**
 
@@ -201,8 +201,8 @@ Real-time-oriented video model that generates clips quickly.
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| fp16 | 8.0 GB | Recommended. |
-| fp8 | 5.0 GB | Lighter. |
+| fp16 | 8 GB | Recommended. |
+| fp8 | 5 GB | Lighter. |
 
 **Run it:**
 

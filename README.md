@@ -22,19 +22,19 @@ A curated guide to the best local AI models that actually fit an **RTX 4070 Ti S
 
 | Model | Params | Rec. quant | Weights | KV @ 8K | Fit | tok/s (est.) |
 | --- | --- | --- | --- | --- | --- | --- |
-| [Qwen3-14B](https://tespio.github.io/moddle/models/qwen3-14b/) | 14B | Q5_K_M | 10.5 GB | 1.25 GB | Full | 35-55 |
-| [Mistral Small 3.1 24B](https://tespio.github.io/moddle/models/mistral-small-3.1-24b/) | 24B | Q4_K_M | 14.0 GB | 1.25 GB | Tight | 28-40 |
-| [gpt-oss-20b](https://tespio.github.io/moddle/models/gpt-oss-20b/) | 21B (3.6B active) | MXFP4 | 13.0 GB | 0.8 GB | Full | 70-110 |
+| [Qwen3-14B](https://tespio.github.io/moddle/models/qwen3-14b/) | 14B | Q5_K_M | 10.5 GB | 1.3 GB | Full | 35-55 |
+| [Mistral Small 3.1 24B](https://tespio.github.io/moddle/models/mistral-small-3.1-24b/) | 24B | Q4_K_M | 14 GB | 1.3 GB | Tight | 28-40 |
+| [gpt-oss-20b](https://tespio.github.io/moddle/models/gpt-oss-20b/) | 21B (3.6B active) | MXFP4 | 13 GB | 0.8 GB | Full | 70-110 |
 | [Qwen3-30B-A3B](https://tespio.github.io/moddle/models/qwen3-30b-a3b/) | 30B (3B active) | Q4_K_M | 17.5 GB | 1.5 GB | Offload | 60-100 |
-| [Qwen2.5-Coder-14B](https://tespio.github.io/moddle/models/qwen2.5-coder-14b/) | 14B | Q5_K_M | 10.5 GB | 3.0 GB | Full | 35-55 |
+| [Qwen2.5-Coder-14B](https://tespio.github.io/moddle/models/qwen2.5-coder-14b/) | 14B | Q5_K_M | 10.5 GB | 3 GB | Full | 35-55 |
 | [Qwen3-Coder-30B-A3B](https://tespio.github.io/moddle/models/qwen3-coder-30b-a3b/) | 30B (3B active) | Q4_K_M | 17.5 GB | 1.5 GB | Offload | 60-100 |
 | [Qwen2.5-VL-7B](https://tespio.github.io/moddle/models/qwen2.5-vl-7b/) | 7B | Q8_0 | 8.7 GB | 0.9 GB | Full | 45-70 |
-| [MiniCPM-V 2.6](https://tespio.github.io/moddle/models/minicpm-v-2.6/) | 8B | Q8_0 | 9.0 GB | 0.9 GB | Full | 45-70 |
+| [MiniCPM-V 2.6](https://tespio.github.io/moddle/models/minicpm-v-2.6/) | 8B | Q8_0 | 9 GB | 0.9 GB | Full | 45-70 |
 | [SDXL / SDXL-Turbo](https://tespio.github.io/moddle/models/sdxl/) | 3.5B (UNet+text encoders) | fp16 | 7.5 GB | - | Full | - |
 | [FLUX.1 [schnell]](https://tespio.github.io/moddle/models/flux-1-schnell/) | 12B | fp8 | 11.5 GB | - | Full | - |
-| [Whisper large-v3-turbo](https://tespio.github.io/moddle/models/whisper-large-v3-turbo/) | 809M | int8 | 2.0 GB | - | Full | - |
+| [Whisper large-v3-turbo](https://tespio.github.io/moddle/models/whisper-large-v3-turbo/) | 809M | int8 | 2 GB | - | Full | - |
 | [Kokoro-82M](https://tespio.github.io/moddle/models/kokoro-82m/) | 82M | fp16 | 0.5 GB | - | Full | - |
-| [BGE-M3](https://tespio.github.io/moddle/models/bge-m3/) | 568M | fp16 | 2.0 GB | - | Full | - |
+| [BGE-M3](https://tespio.github.io/moddle/models/bge-m3/) | 568M | fp16 | 2 GB | - | Full | - |
 
 ## Categories
 

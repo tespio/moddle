@@ -6,10 +6,10 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 
 | Model | Params | Rec. quant | Weights | KV @ 8K | Fit | tok/s (est.) |
 | --- | --- | --- | --- | --- | --- | --- |
-| [Qwen2.5-Coder-14B](../models/coding.md) | 14B | Q5_K_M | 10.5 GB | 3.0 GB | Full | 35-55 |
+| [Qwen2.5-Coder-14B](../models/coding.md) | 14B | Q5_K_M | 10.5 GB | 3 GB | Full | 35-55 |
 | [Qwen3-Coder-30B-A3B](../models/coding.md) | 30B (3B active) | Q4_K_M | 17.5 GB | 1.5 GB | Offload | 60-100 |
 | [DeepSeek-Coder-V2-Lite](../models/coding.md) | 16B (2.4B active) | Q5_K_M | 11.5 GB | 0.8 GB | Full | 55-85 |
-| [Codestral 22B](../models/coding.md) | 22B | Q4_K_M | 13.0 GB | 2.5 GB | Full | 28-42 |
+| [Codestral 22B](../models/coding.md) | 22B | Q4_K_M | 13 GB | 2.5 GB | Full | 28-42 |
 | [Qwen2.5-Coder-7B](../models/coding.md) | 7B | Q8_0 | 7.6 GB | 0.9 GB | Full | 60-90 |
 
 ## Models
@@ -82,7 +82,7 @@ MoE coding model with agentic tool use and a huge native context.
 | --- | --- | --- |
 | Q4_K_M | 17.5 GB | Slight offload; very fast. |
 | Q3_K_M | 14.5 GB | Fully resident, small quality cost. |
-| Q5_K_M | 21.0 GB | Higher quality, more offload. |
+| Q5_K_M | 21 GB | Higher quality, more offload. |
 
 **Run it:**
 
@@ -131,7 +131,7 @@ MoE coding model that fits fully and supports 338 programming languages.
 | --- | --- | --- |
 | Q4_K_M | 9.6 GB | Recommended for speed. |
 | Q5_K_M | 11.5 GB | Fully resident, more context. |
-| Q8_0 | 17.0 GB | Offload required. |
+| Q8_0 | 17 GB | Offload required. |
 
 **Run it:**
 
@@ -178,7 +178,7 @@ Mistral's code specialist with strong completion and 80+ language coverage.
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| Q4_K_M | 13.0 GB | Recommended. Fits with context. |
+| Q4_K_M | 13 GB | Recommended. Fits with context. |
 | Q4_K_S | 12.2 GB | A bit more room. |
 | Q5_K_M | 15.3 GB | Tight; short contexts only. |
 

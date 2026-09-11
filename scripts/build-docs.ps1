@@ -48,7 +48,16 @@ function Get-FitLabel {
 function Format-Number {
     param($Value)
     if ($null -eq $Value) { return '-' }
-    return ('{0:n0}' -f [double]$Value)
+    return ([double]$Value).ToString('N0', [System.Globalization.CultureInfo]::InvariantCulture)
+}
+
+function Format-GB {
+    param($Value)
+    if ($null -eq $Value) { return '-' }
+    $d = [double]$Value
+    $ci = [System.Globalization.CultureInfo]::InvariantCulture
+    if ($d -eq [math]::Floor($d)) { return $d.ToString('0', $ci) }
+    return $d.ToString('0.#', $ci)
 }
 
 function New-ModelTable {
@@ -57,14 +66,14 @@ function New-ModelTable {
     [void]$sb.AppendLine('| Model | Params | Rec. quant | Weights | KV @ 8K | Fit | tok/s (est.) |')
     [void]$sb.AppendLine('| --- | --- | --- | --- | --- | --- | --- |')
     foreach ($m in $Models) {
-        $kv = if ($null -ne $m.recommended.kv8k -and $m.recommended.kv8k -gt 0) { "$($m.recommended.kv8k) GB" } else { '-' }
+        $kv = if ($null -ne $m.recommended.kv8k -and $m.recommended.kv8k -gt 0) { "$(Format-GB $m.recommended.kv8k) GB" } else { '-' }
         $tok = if ($m.tokps -and $m.tokps -ne 'n/a') { $m.tokps } else { '-' }
         if ($LinkMode -eq 'site') {
             $name = "[$($m.name)]($SiteUrl/models/$($m.id)/)"
         } else {
             $name = "[$($m.name)](../models/$($m.category).md)"
         }
-        [void]$sb.AppendLine("| $name | $($m.params) | $($m.recommended.quant) | $($m.recommended.vram) GB | $kv | $(Get-FitLabel $m.fit) | $tok |")
+        [void]$sb.AppendLine("| $name | $($m.params) | $($m.recommended.quant) | $(Format-GB $m.recommended.vram) GB | $kv | $(Get-FitLabel $m.fit) | $tok |")
     }
     return $sb.ToString()
 }
@@ -94,7 +103,7 @@ function New-ModelDetails {
     [void]$sb.AppendLine('| Quant | Weights | Notes |')
     [void]$sb.AppendLine('| --- | --- | --- |')
     foreach ($q in $m.quants) {
-        [void]$sb.AppendLine("| $($q.quant) | $($q.vram) GB | $($q.note) |")
+        [void]$sb.AppendLine("| $($q.quant) | $(Format-GB $q.vram) GB | $($q.note) |")
     }
     [void]$sb.AppendLine()
     [void]$sb.AppendLine('**Run it:**')

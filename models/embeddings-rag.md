@@ -6,10 +6,10 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 
 | Model | Params | Rec. quant | Weights | KV @ 8K | Fit | tok/s (est.) |
 | --- | --- | --- | --- | --- | --- | --- |
-| [BGE-M3](../models/embeddings-rag.md) | 568M | fp16 | 2.0 GB | - | Full | - |
-| [Qwen3-Embedding-4B](../models/embeddings-rag.md) | 4B | fp16 | 8.0 GB | 1.5 GB | Full | - |
+| [BGE-M3](../models/embeddings-rag.md) | 568M | fp16 | 2 GB | - | Full | - |
+| [Qwen3-Embedding-4B](../models/embeddings-rag.md) | 4B | fp16 | 8 GB | 1.5 GB | Full | - |
 | [nomic-embed-text v1.5](../models/embeddings-rag.md) | 137M | fp16 | 0.5 GB | - | Full | - |
-| [BGE Reranker v2-m3](../models/embeddings-rag.md) | 568M | fp16 | 2.0 GB | - | Full | - |
+| [BGE Reranker v2-m3](../models/embeddings-rag.md) | 568M | fp16 | 2 GB | - | Full | - |
 | [Qwen3-Reranker-4B](../models/embeddings-rag.md) | 4B | Q8_0 | 4.3 GB | 1.5 GB | Full | - |
 
 ## Models
@@ -30,8 +30,8 @@ Multilingual, multi-granularity embedder supporting dense, sparse, and ColBERT r
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| fp16 | 2.0 GB | Recommended. |
-| fp32 | 3.0 GB | CPU-friendly too. |
+| fp16 | 2 GB | Recommended. |
+| fp32 | 3 GB | CPU-friendly too. |
 
 **Run it:**
 
@@ -65,7 +65,7 @@ High-ranking text embedder with instruction-following and 100+ languages.
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| fp16 | 8.0 GB | Recommended. |
+| fp16 | 8 GB | Recommended. |
 | Q8_0 | 4.3 GB | Frees VRAM for the LLM. |
 
 **Run it:**
@@ -134,7 +134,7 @@ Multilingual cross-encoder reranker that sharply improves RAG precision.
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| fp16 | 2.0 GB | Recommended. |
+| fp16 | 2 GB | Recommended. |
 
 **Run it:**
 
@@ -162,7 +162,7 @@ Instruction-aware reranker with strong multilingual and long-context precision.
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| fp16 | 8.0 GB | Best quality. |
+| fp16 | 8 GB | Best quality. |
 | Q8_0 | 4.3 GB | Recommended. Frees VRAM. |
 
 **Run it:**
