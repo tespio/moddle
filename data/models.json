@@ -79,23 +79,33 @@
       "license": "apache-2.0",
       "source": "https://ollama.com/library/qwen3.8",
       "summary": "Qwen's current 27B flagship for coding, professional work, research, and long-horizon agentic tasks, with vision and thinking.",
-      "why": "The strongest generalist you can self-host in this class. Needs partial offload at Q4, but the jump in capability is worth it.",
-      "fit": "offload",
-      "recommended": { "quant": "Q4_K_M", "vram": 16.5, "kv8k": 2.5 },
+      "why": "The strongest generalist you can self-host in this class. With EXL3 quants and int4 KV cache it stays fully resident on 16 GB, at a 176K context with images.",
+      "fit": "tight",
+      "recommended": { "quant": "EXL3 2.5 bpw", "vram": 11.0, "kv8k": 0.4 },
       "kvPerTokenMB": 0.3,
       "quants": [
-        { "quant": "Q3_K_M", "vram": 13.0, "note": "Near-resident; small quality cost." },
-        { "quant": "Q4_K_M", "vram": 16.5, "note": "Recommended; moderate offload." }
+        { "quant": "EXL3 2.0 bpw", "vram": 9.7, "note": "Floor for 12-16 GB. ~229K ctx with images; quality is fair.", "kvPerTokenMB": 0.075, "context": 229376 },
+        { "quant": "EXL3 2.5 bpw", "vram": 11.0, "note": "Recommended. ~176K ctx with images; good quality.", "kvPerTokenMB": 0.075, "context": 176128 },
+        { "quant": "EXL3 3.0 bpw", "vram": 13.0, "note": "Better quality; ~118K ctx with images.", "kvPerTokenMB": 0.075, "context": 118784 },
+        { "quant": "EXL3 3.5 bpw", "vram": 14.5, "note": "Very good; text-only at ~78K ctx on 16 GB.", "kvPerTokenMB": 0.075, "context": 77824 },
+        { "quant": "GGUF Q3_K_M", "vram": 13.0, "note": "llama.cpp path with fp16 KV; smaller context." },
+        { "quant": "GGUF Q4_K_M", "vram": 16.5, "note": "llama.cpp path; partial offload." }
       ],
       "runtimes": {
+        "exl3": "ExLlamaV3 v1.4.4 + turboderp/Qwen3.8-27B-exl3 (2.5 bpw)",
         "ollama": "ollama run qwen3.8:27b",
         "lmstudio": "Search \"Qwen3.8 27B GGUF\"",
         "llamacpp": "llama-cli -hf unsloth/Qwen3.8-27B-GGUF:Q4_K_M -c 32768 -ngl 40",
         "vllm": "vllm serve Qwen/Qwen3.8-27B --max-model-len 32768"
       },
-      "tokps": "15-28",
+      "kit": {
+        "name": "Simplex one-click install",
+        "url": "https://github.com/MiaAI-Lab/Qwen3.8-27B-16gb-NVIDIA-GPUs-one-click-install",
+        "note": "Windows/Linux installer that picks the right EXL3 quant for your card, downloads it, serves an OpenAI-compatible endpoint, and opens a chat UI."
+      },
+      "tokps": "25-45",
       "released": 2026,
-      "tags": ["vision", "thinking", "agentic", "offload"]
+      "tags": ["vision", "thinking", "agentic", "exl3", "one-click-kit"]
     },
     {
       "id": "qwen3.5-9b",

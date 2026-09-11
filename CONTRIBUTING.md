@@ -49,7 +49,14 @@ Add or fix a model there, and the docs follow.
 | `recommended` | `{ quant, vram, kv8k }` |
 | `quants` | Array of `{ quant, vram, note }` |
 | `runtimes` | Object of copy-ready commands |
-| `tokps` | Estimated tokens/sec tier on a 4070 Ti Super |
+| `tokps` | Estimated tokens/sec tier for a 16 GB card |
+
+### Optional fields
+
+- `kit` — a one-click installer for this model, as
+  `{ "name", "url", "note" }`. Shown as a call-to-action on the model page.
+- Per-quant `kvPerTokenMB` and `context` — override the model-level values when a
+  quant (e.g. an EXL3 int4-KV build) has a very different memory profile.
 
 ### Accuracy policy
 

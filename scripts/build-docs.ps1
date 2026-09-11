@@ -116,6 +116,10 @@ function New-ModelDetails {
         [void]$sb.AppendLine('```')
         [void]$sb.AppendLine()
     }
+    if ($m.kit) {
+        [void]$sb.AppendLine("**One-click kit:** [$($m.kit.name)]($($m.kit.url)) - $($m.kit.note)")
+        [void]$sb.AppendLine()
+    }
     [void]$sb.AppendLine("---")
     [void]$sb.AppendLine()
     return $sb.ToString()
@@ -207,6 +211,7 @@ foreach ($cat in $data.categories) {
 [void]$r.AppendLine()
 [void]$r.AppendLine('- [Hardware & VRAM](docs/hardware.md) - the memory math that decides what fits.')
 [void]$r.AppendLine('- [Quantization](docs/quantization.md) - GGUF ladders, KV-cache quants, tradeoffs.')
+[void]$r.AppendLine('- [EXL3 & ExLlamaV3](docs/exl3.md) - best-in-class low-bit quants and one-click kits.')
 [void]$r.AppendLine('- [Tuning for 16 GB](docs/tuning.md) - context, offload, OOM troubleshooting.')
 [void]$r.AppendLine('- [Runtimes](docs/runtimes.md) - Ollama, LM Studio, llama.cpp, vLLM/SGLang, ComfyUI.')
 [void]$r.AppendLine()

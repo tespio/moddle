@@ -6,7 +6,7 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 
 | Model | Params | Rec. quant | Weights | KV @ 8K | Fit | tok/s (est.) |
 | --- | --- | --- | --- | --- | --- | --- |
-| [Qwen3.8-27B](../models/chat.md) | 27B | Q4_K_M | 16.5 GB | 2.5 GB | Offload | 15-28 |
+| [Qwen3.8-27B](../models/chat.md) | 27B | EXL3 2.5 bpw | 11 GB | 0.4 GB | Tight | 25-45 |
 | [Qwen3.5-9B](../models/chat.md) | 9B | Q6_K | 7.4 GB | 1 GB | Full | 55-85 |
 | [Qwen3.5-27B](../models/chat.md) | 27B | Q3_K_M | 13 GB | 2.5 GB | Tight | 18-30 |
 | [Qwen3.6-27B](../models/chat.md) | 27B | Q4_K_M | 16 GB | 2.5 GB | Offload | 16-28 |
@@ -31,23 +31,33 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 
 Qwen's current 27B flagship for coding, professional work, research, and long-horizon agentic tasks, with vision and thinking.
 
-**Why it's here:** The strongest generalist you can self-host in this class. Needs partial offload at Q4, but the jump in capability is worth it.
+**Why it's here:** The strongest generalist you can self-host in this class. With EXL3 quants and int4 KV cache it stays fully resident on 16 GB, at a 176K context with images.
 
 - **Params:** 27B
 - **Context:** 262,144 tokens
 - **License:** apache-2.0
-- **Fit on 16 GB:** Offload
+- **Fit on 16 GB:** Tight
 - **Source:** <https://ollama.com/library/qwen3.8>
-- **Speed (est.):** 15-28 tok/s on a 16 GB card
+- **Speed (est.):** 25-45 tok/s on a 16 GB card
 
 **Quants:**
 
 | Quant | Weights | Notes |
 | --- | --- | --- |
-| Q3_K_M | 13 GB | Near-resident; small quality cost. |
-| Q4_K_M | 16.5 GB | Recommended; moderate offload. |
+| EXL3 2.0 bpw | 9.7 GB | Floor for 12-16 GB. ~229K ctx with images; quality is fair. |
+| EXL3 2.5 bpw | 11 GB | Recommended. ~176K ctx with images; good quality. |
+| EXL3 3.0 bpw | 13 GB | Better quality; ~118K ctx with images. |
+| EXL3 3.5 bpw | 14.5 GB | Very good; text-only at ~78K ctx on 16 GB. |
+| GGUF Q3_K_M | 13 GB | llama.cpp path with fp16 KV; smaller context. |
+| GGUF Q4_K_M | 16.5 GB | llama.cpp path; partial offload. |
 
 **Run it:**
+
+_exl3_
+
+```
+ExLlamaV3 v1.4.4 + turboderp/Qwen3.8-27B-exl3 (2.5 bpw)
+```
 
 _ollama_
 
@@ -72,6 +82,8 @@ _vllm_
 ```
 vllm serve Qwen/Qwen3.8-27B --max-model-len 32768
 ```
+
+**One-click kit:** [Simplex one-click install](https://github.com/MiaAI-Lab/Qwen3.8-27B-16gb-NVIDIA-GPUs-one-click-install) - Windows/Linux installer that picks the right EXL3 quant for your card, downloads it, serves an OpenAI-compatible endpoint, and opens a chat UI.
 
 ---
 

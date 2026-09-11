@@ -47,6 +47,11 @@ const tags = model.tags ?? [];
           </div>
         </div>
         <div class="detail-actions">
+          {model.kit && (
+            <a class="btn btn-primary btn-sm" href={model.kit.url} target="_blank" rel="noopener noreferrer">
+              One-click install ↗
+            </a>
+          )}
           <a class="btn btn-ghost btn-sm" href={model.source} target="_blank" rel="noopener noreferrer">
             Model card ↗
           </a>
@@ -56,6 +61,19 @@ const tags = model.tags ?? [];
       <p class="lede muted" style="font-size:1.05rem;max-width:70ch">{model.summary}</p>
 
       <div class="grid" style="grid-template-columns:1fr;gap:26px">
+        {
+          model.kit && (
+            <div class="card" style="border-color:rgba(124,123,255,.45)">
+              <div class="family">One-click kit</div>
+              <h3>{model.kit.name}</h3>
+              <p>{model.kit.note}</p>
+              <a class="btn btn-primary btn-sm" href={model.kit.url} target="_blank" rel="noopener noreferrer">
+                Get the installer ↗
+              </a>
+            </div>
+          )
+        }
+
         <div class="card">
           <h3>Why it's here</h3>
           <p style="margin:0">{model.why}</p>

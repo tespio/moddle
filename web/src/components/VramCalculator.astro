@@ -6,7 +6,12 @@ const payload = models.map((m) => ({
   name: m.name,
   context: m.context,
   kv: m.kvPerTokenMB,
-  quants: m.quants.map((q) => ({ quant: q.quant, vram: q.vram })),
+  quants: m.quants.map((q) => ({
+    quant: q.quant,
+    vram: q.vram,
+    kv: q.kvPerTokenMB ?? null,
+    ctx: q.context ?? null,
+  })),
 }));
 
 const usable = hardware.usableVramGB;
@@ -66,6 +71,8 @@ const vram = hardware.vramGB;
   interface Quant {
     quant: string;
     vram: number;
+    kv: number | null;
+    ctx: number | null;
   }
   interface Item {
     id: string;
@@ -79,7 +86,7 @@ const vram = hardware.vramGB;
   const dataEl = document.getElementById('calc-data');
   if (root && dataEl) {
     const items: Item[] = JSON.parse(dataEl.textContent || '[]');
-    const usable = parseFloat(root.dataset.usable || '14.75');
+    const usable = parseFloat(root.dataset.usable || '14.5');
     const vram = parseFloat(root.dataset.vram || '16');
 
     const modelSel = document.getElementById('calc-model') as HTMLSelectElement;
@@ -105,29 +112,48 @@ const vram = hardware.vramGB;
       return items.find((m) => m.id === modelSel.value) || items[0];
     }
 
+    function currentQuant(): Quant {
+      const m = current();
+      return m.quants.find((x) => x.quant === quantSel.value) || m.quants[0];
+    }
+
+    function quantKv(q: Quant): number | null {
+      const m = current();
+      const kv = q.kv ?? m.kv;
+      return kv && kv > 0 ? kv : null;
+    }
+
+    function quantMaxCtx(q: Quant): number {
+      return q.ctx ?? current().context;
+    }
+
+    function syncContextBounds(reset: boolean) {
+      const q = currentQuant();
+      const kv = quantKv(q);
+      const maxCtx = quantMaxCtx(q);
+      ctx.disabled = !kv || maxCtx <= 0;
+      ctx.max = String(kv ? Math.max(maxCtx, 2048) : 0);
+      if (kv && reset) ctx.value = String(Math.min(8192, maxCtx));
+      if (kv && parseInt(ctx.value, 10) > maxCtx) ctx.value = String(maxCtx);
+      if (ctxVal) ctxVal.textContent = kv ? fmtK(parseInt(ctx.value, 10)) : 'n/a';
+    }
+
     function fillQuants() {
       const m = current();
       quantSel.innerHTML = m.quants
         .map((q) => `<option value="${q.quant}">${q.quant} — ${q.vram} GB</option>`)
         .join('');
-      const rec = m.quants.find((q) => q.quant === m.quants[0]?.quant) || m.quants[0];
-      if (rec) quantSel.value = rec.quant;
-
-      const hasKv = !!m.kv && m.kv > 0;
-      ctx.disabled = !hasKv;
-      ctx.max = String(hasKv ? Math.max(m.context, 2048) : 0);
-      if (hasKv) ctx.value = String(Math.min(8192, m.context));
-      if (ctxVal) ctxVal.textContent = hasKv ? fmtK(parseInt(ctx.value, 10)) : 'n/a';
-
+      quantSel.value = m.quants[0]?.quant ?? '';
+      syncContextBounds(true);
       compute();
     }
 
     function compute() {
-      const m = current();
-      const q = m.quants.find((x) => x.quant === quantSel.value) || m.quants[0];
+      const q = currentQuant();
       const weights = q ? q.vram : 0;
-      const ctxTokens = m.kv && m.kv > 0 ? parseInt(ctx.value, 10) : 0;
-      const kvGB = m.kv ? (m.kv * ctxTokens) / 1024 : 0;
+      const kvPerToken = q ? quantKv(q) : null;
+      const ctxTokens = kvPerToken ? parseInt(ctx.value, 10) : 0;
+      const kvGB = kvPerToken ? (kvPerToken * ctxTokens) / 1024 : 0;
       const total = weights + kvGB;
       const headroom = usable - total;
 
@@ -163,7 +189,10 @@ const vram = hardware.vramGB;
     }
 
     modelSel.addEventListener('change', fillQuants);
-    quantSel.addEventListener('change', compute);
+    quantSel.addEventListener('change', () => {
+      syncContextBounds(true);
+      compute();
+    });
     ctx.addEventListener('input', () => {
       if (ctxVal) ctxVal.textContent = fmtK(parseInt(ctx.value, 10));
       compute();

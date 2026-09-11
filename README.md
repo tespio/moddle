@@ -32,7 +32,7 @@ Anything with **16 GB of VRAM**, ideally ~32 GB of RAM and an SSD. Cards this co
 
 | Model | Params | Rec. quant | Weights | KV @ 8K | Fit | tok/s (est.) |
 | --- | --- | --- | --- | --- | --- | --- |
-| [Qwen3.8-27B](https://tespio.github.io/moddle/models/qwen3.8-27b/) | 27B | Q4_K_M | 16.5 GB | 2.5 GB | Offload | 15-28 |
+| [Qwen3.8-27B](https://tespio.github.io/moddle/models/qwen3.8-27b/) | 27B | EXL3 2.5 bpw | 11 GB | 0.4 GB | Tight | 25-45 |
 | [Qwen3.5-9B](https://tespio.github.io/moddle/models/qwen3.5-9b/) | 9B | Q6_K | 7.4 GB | 1 GB | Full | 55-85 |
 | [Gemma 4 12B](https://tespio.github.io/moddle/models/gemma-4-12b/) | 12B | Q6_K | 10 GB | 2.8 GB | Full | 40-60 |
 | [GLM-4.7-Flash](https://tespio.github.io/moddle/models/glm-4.7-flash/) | 30B (3B active) | Q4_K_M | 19 GB | 1.5 GB | Offload | 55-90 |
@@ -59,6 +59,7 @@ Anything with **16 GB of VRAM**, ideally ~32 GB of RAM and an SSD. Cards this co
 
 - [Hardware & VRAM](docs/hardware.md) - the memory math that decides what fits.
 - [Quantization](docs/quantization.md) - GGUF ladders, KV-cache quants, tradeoffs.
+- [EXL3 & ExLlamaV3](docs/exl3.md) - best-in-class low-bit quants and one-click kits.
 - [Tuning for 16 GB](docs/tuning.md) - context, offload, OOM troubleshooting.
 - [Runtimes](docs/runtimes.md) - Ollama, LM Studio, llama.cpp, vLLM/SGLang, ComfyUI.
 

@@ -40,6 +40,25 @@ llama-cli -hf bartowski/Qwen_Qwen3-14B-GGUF:Q5_K_M -c 32768 -ngl 99 --flash-attn
 - `llama-mtmd-cli` is the path for vision models (Qwen-VL, Gemma, Llama Vision).
 - Everything in `docs/tuning.md` applies here.
 
+## ExLlamaV3 — EXL3 quants (NVIDIA)
+
+Best for: squeezing a big model (like a 27B) fully onto 16 GB with top quality.
+
+- Runs **EXL3** quants — the highest-quality low-bit format for NVIDIA cards.
+- See [EXL3 & ExLlamaV3](exl3.md) for the bpw ladder and int4 KV cache.
+- Easiest path: the **Simplex one-click kit** for Qwen3.8-27B, which picks the
+  quant that fits your card and serves an OpenAI-compatible endpoint:
+  <https://github.com/MiaAI-Lab/Qwen3.8-27B-16gb-NVIDIA-GPUs-one-click-install>
+
+```bash
+# The kit serves:
+#   http://127.0.0.1:8888/v1   OpenAI-compatible API (key: local)
+#   chat UI on http://127.0.0.1:3080/
+```
+
+- NVIDIA only, compute 7.5+, driver 570+, Python 3.11+.
+- No CUDA Toolkit or compiler needed: ExLlamaV3 ships prebuilt wheels.
+
 ## vLLM / SGLang — throughput
 
 Best for: serving multiple requests, batching, and evaluation.
@@ -81,6 +100,7 @@ Best for: SDXL, FLUX, SD3.5, LTX-Video, and Wan.
 | Easiest start | Ollama |
 | To click and explore | LM Studio |
 | Full control / scripting | llama.cpp |
+| A big model fully on 16 GB (NVIDIA) | ExLlamaV3 / Simplex kit |
 | Many concurrent users | vLLM / SGLang |
 | Images and video | ComfyUI |
 | Transcription or TTS | faster-whisper / whisper.cpp / Kokoro |

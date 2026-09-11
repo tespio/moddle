@@ -4,12 +4,20 @@ export interface Quant {
   quant: string;
   vram: number;
   note: string;
+  kvPerTokenMB?: number;
+  context?: number;
 }
 
 export interface Recommended {
   quant: string;
   vram: number;
   kv8k: number;
+}
+
+export interface Kit {
+  name: string;
+  url: string;
+  note: string;
 }
 
 export interface Model {
@@ -30,6 +38,7 @@ export interface Model {
   kvPerTokenMB: number | null;
   quants: Quant[];
   runtimes: Record<string, string>;
+  kit?: Kit;
   tokps: string;
   released: number;
   tags: string[];
@@ -72,6 +81,7 @@ export const fitLabels: Record<string, string> = {
 };
 
 export const runtimeLabels: Record<string, string> = {
+  exl3: 'ExLlamaV3 (EXL3)',
   ollama: 'Ollama',
   lmstudio: 'LM Studio',
   llamacpp: 'llama.cpp',

@@ -42,6 +42,7 @@ const pct = Math.min(100, Math.round((totalForBar / 16) * 100));
     <span class="chip">{model.recommended.quant}</span>
     <span class="chip">{model.recommended.vram} GB</span>
     {model.tokps && model.tokps !== 'n/a' && <span class="chip">{model.tokps} tok/s</span>}
+    {model.kit && <span class="chip chip-strong">One-click kit</span>}
   </div>
 
   <div>

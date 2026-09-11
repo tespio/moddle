@@ -26,7 +26,12 @@ for (const file of files) {
   const raw = await readFile(path.join(docsSrc, file), 'utf8');
   const match = raw.match(/^#\s+(.+?)\s*$/m);
   const title = match ? match[1].trim() : file.replace(/\.md$/, '');
-  const body = match ? raw.replace(/^#\s+.+?(\r?\n)/, '') : raw;
+  let body = match ? raw.replace(/^#\s+.+?(\r?\n)/, '') : raw;
+  // Rewrite repo-relative doc links (foo.md) to site routes (/moddle/docs/foo/)
+  body = body.replace(
+    /\]\((?!https?:|mailto:|#|\/)([a-z0-9._-]+)\.md(#[^)]*)?\)/gi,
+    (_m, slug, hash) => `](/moddle/docs/${slug}/${hash ?? ''})`
+  );
   const out = `---\ntitle: ${JSON.stringify(title)}\n---\n\n${body}`;
   await writeFile(path.join(docsOut, file), out, 'utf8');
 }

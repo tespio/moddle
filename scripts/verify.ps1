@@ -74,12 +74,13 @@ $pages = @{
     'index.html'                       = 'Because your GPU has'
     'models/index.html'                = 'All '
     'models/qwen3-14b/index.html'      = 'Qwen3-14B'
-    'models/qwen3.8-27b/index.html'    = 'Qwen3.8-27B'
+    'models/qwen3.8-27b/index.html'    = 'One-click kit'
     'models/gemma-4-12b/index.html'    = 'Gemma 4 12B'
     'models/qwen3-vl-8b/index.html'    = 'Qwen3-VL-8B'
     'categories/chat/index.html'       = 'Chat'
     'docs/index.html'                  = 'Guides'
     'docs/hardware/index.html'         = 'usable'
+    'docs/exl3/index.html'             = 'ExLlamaV3'
     'docs/tuning/index.html'           = 'OOM'
 }
 foreach ($rel in $pages.Keys) {
@@ -134,6 +135,7 @@ if (-not $SkipPreview) {
                     '/categories/vision/',
                     '/docs/',
                     '/docs/quantization/',
+                    '/docs/exl3/',
                     '/sitemap-index.xml',
                     '/favicon.svg'
                 )

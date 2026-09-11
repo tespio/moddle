@@ -33,6 +33,20 @@ is tiny; done aggressively, the model gets noticeably dumber.
   quality at very low bitrates. Great when you must go below Q4, but slower to
   produce and slightly more runtime-dependent.
 
+## EXL3 (ExLlamaV3)
+
+[EXL3](exl3.md) is a NVIDIA-focused quant format for the ExLlamaV3 engine. It
+holds up far better than GGUF below 4 bits, which matters most on a 16 GB card:
+
+- **2.0–3.5 bpw** quants of a 27B model fit in 16 GB while keeping a long context
+  and the vision tower.
+- **int4 KV cache** is near-lossless (measured within 0.001 KL of fp16) and is the
+  default in the recommended profiles.
+- Quality is tracked as mean KL versus bf16, so you can pick a bpw deliberately.
+
+If you have an NVIDIA 16 GB card and a model that is just too big for GGUF, reach
+for EXL3 first.
+
 ## Practical rules
 
 1. **Start at Q4_K_M.** If it fits with the context you want, you're done.
