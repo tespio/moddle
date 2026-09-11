@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import ModelCard from '../../components/ModelCard.astro';
+import { categories, byCategory } from '../../lib/models';
+import type { Category } from '../../lib/models';
+import { withBase } from '../../lib/site';
+
+export function getStaticPaths() {
+  return categories.map((category) => ({ params: { slug: category.id }, props: { category } }));
+}
+
+interface Props {
+  category: Category;
+}
+const { category } = Astro.props;
+const list = byCategory(category.id);
+---
+
+<Base title={category.name} description={`${category.blurb} Curated for 16 GB VRAM.`}>
+  <section class="section">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href={withBase('/')}>Home</a> <span>/</span> <span>{category.name}</span>
+      </nav>
+
+      <div class="section-head">
+        <div>
+          <span class="cat-icon" style="margin-bottom:10px"><Icon name={category.icon} size={24} /></span>
+          <h1 style="font-size:clamp(1.8rem,4vw,2.6rem)">{category.name}</h1>
+          <p>{category.blurb}</p>
+        </div>
+        <span class="chip chip-strong">{list.length} models</span>
+      </div>
+
+      <div class="grid grid-cards">
+        {list.map((m) => <ModelCard model={m} />)}
+      </div>
+    </div>
+  </section>
+</Base>

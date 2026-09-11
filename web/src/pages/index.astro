@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Icon from '../components/Icon.astro';
+import ModelTable from '../components/ModelTable.astro';
+import VramCalculator from '../components/VramCalculator.astro';
+import { categories, byCategory, topPicks } from '../lib/models';
+import { withBase } from '../lib/site';
+
+const picks = topPicks([
+  'qwen3-14b',
+  'mistral-small-3.1-24b',
+  'gpt-oss-20b',
+  'qwen3-30b-a3b',
+  'qwen2.5-coder-14b',
+  'qwen3-coder-30b-a3b',
+  'qwen2.5-vl-7b',
+  'flux-1-schnell',
+  'whisper-large-v3-turbo',
+  'bge-m3',
+]);
+---
+
+<Base>
+  <Hero />
+
+  <section class="section" id="categories">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">● pick your workload</span>
+          <h2>Six categories, all covered</h2>
+          <p>Everything from reasoning to image generation, scoped to 16 GB.</p>
+        </div>
+        <a class="btn btn-ghost btn-sm" href={withBase('/models/')}>See everything →</a>
+      </div>
+
+      <div class="grid grid-cats">
+        {
+          categories.map((cat) => (
+            <a class="card cat-card" href={withBase(`/categories/${cat.id}/`)}>
+              <span class="cat-icon"><Icon name={cat.icon} /></span>
+              <h3>{cat.name}</h3>
+              <p>{cat.blurb}</p>
+              <span class="count">{byCategory(cat.id).length} models →</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <VramCalculator />
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">● start here</span>
+          <h2>If you only try ten things</h2>
+          <p>The models with the best quality-per-gigabyte on this hardware.</p>
+        </div>
+      </div>
+      <ModelTable models={picks} showCategory />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">● fresh install</span>
+          <h2>Up and running in one line</h2>
+          <p>Ollama is the fastest path. Every model page has commands for every runtime.</p>
+        </div>
+      </div>
+      <div class="grid grid-cards">
+        <div class="card">
+          <h3>1. Install Ollama</h3>
+          <p>Grab it from ollama.com and it handles GPU offload automatically.</p>
+        </div>
+        <div class="card">
+          <h3>2. Pull a model</h3>
+          <pre><code>ollama run qwen3:14b</code></pre>
+        </div>
+        <div class="card">
+          <h3>3. Chat</h3>
+          <p>Terminal, or point any OpenAI-compatible app at localhost:11434.</p>
+        </div>
+      </div>
+      <div class="mt-3">
+        <a class="btn btn-primary" href={withBase('/docs/runtimes/')}>Read the runtime guides →</a>
+      </div>
+    </div>
+  </section>
+</Base>

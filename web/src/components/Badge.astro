@@ -1,0 +1,14 @@
+---
+interface Props {
+  fit: string;
+}
+const { fit } = Astro.props;
+const labels: Record<string, string> = {
+  full: 'Fits fully',
+  tight: 'Tight fit',
+  offload: 'Needs offload',
+};
+const label = labels[fit] ?? fit;
+---
+
+<span class={`fit fit-${fit}`}>{label}</span>

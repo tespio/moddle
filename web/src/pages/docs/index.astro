@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/site';
+
+const docs = (await getCollection('docs')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+---
+
+<Base title="Guides" description="Hardware, quantization, tuning, and runtime guides for running local AI on 16 GB of VRAM.">
+  <section class="section">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href={withBase('/')}>Home</a> <span>/</span> <span>Guides</span>
+      </nav>
+
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">● documentation</span>
+          <h2>Guides</h2>
+          <p>The reasoning behind every recommendation in this repo.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cards">
+        {
+          docs.map((doc) => (
+            <a class="card" href={withBase(`/docs/${doc.id}/`)}>
+              <h3>{doc.data.title}</h3>
+              <p>Read the guide →</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

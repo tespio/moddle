@@ -1,0 +1,113 @@
+---
+import { categories, runtimeKeys, runtimeLabels } from '../lib/models';
+---
+
+<div class="toolbar" role="search">
+  <div class="field">
+    <label for="f-search">Search</label>
+    <input id="f-search" type="search" placeholder="e.g. qwen, coder, whisper…" autocomplete="off" />
+  </div>
+
+  <div class="field">
+    <label for="f-cat">Task</label>
+    <select id="f-cat">
+      <option value="">All tasks</option>
+      {categories.map((c) => <option value={c.id}>{c.name}</option>)}
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="f-fit">Fit on 16 GB</label>
+    <select id="f-fit">
+      <option value="">Any fit</option>
+      <option value="full">Fits fully</option>
+      <option value="tight">Tight</option>
+      <option value="offload">Needs offload</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="f-runtime">Runtime</label>
+    <select id="f-runtime">
+      <option value="">Any runtime</option>
+      {runtimeKeys.map((r) => <option value={r}>{runtimeLabels[r] ?? r}</option>)}
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="f-sort">Sort</label>
+    <select id="f-sort">
+      <option value="name">Name</option>
+      <option value="vram-asc">Smallest first</option>
+      <option value="vram-desc">Largest first</option>
+      <option value="tokps">Fastest first</option>
+    </select>
+  </div>
+</div>
+
+<p class="filter-status" id="filter-status">Loading…</p>
+
+<script>
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-card]'));
+  const container = document.getElementById('cards');
+  const status = document.getElementById('filter-status');
+
+  if (cards.length && container) {
+    const search = $('f-search');
+    const cat = $('f-cat');
+    const fit = $('f-fit');
+    const runtime = $('f-runtime');
+    const sort = $('f-sort');
+
+    const firstTok = (s: string) => {
+      const m = s.match(/\d+/);
+      return m ? parseInt(m[0], 10) : -1;
+    };
+
+    function apply() {
+      const q = (search?.value || '').trim().toLowerCase();
+      const c = cat?.value || '';
+      const f = fit?.value || '';
+      const r = runtime?.value || '';
+      let visible = 0;
+
+      for (const card of cards) {
+        const d = card.dataset;
+        const ok =
+          (!q || (d.name || '').includes(q)) &&
+          (!c || d.category === c) &&
+          (!f || d.fit === f) &&
+          (!r || (d.runtime || '').split(',').includes(r));
+        card.classList.toggle('hidden', !ok);
+        if (ok) visible++;
+      }
+
+      const s = sort?.value || 'name';
+      const sorted = [...cards].sort((a, b) => {
+        const da = a.dataset;
+        const db = b.dataset;
+        switch (s) {
+          case 'vram-asc':
+            return parseFloat(da.vram || '0') - parseFloat(db.vram || '0');
+          case 'vram-desc':
+            return parseFloat(db.vram || '0') - parseFloat(da.vram || '0');
+          case 'tokps':
+            return firstTok(db.tokps || '') - firstTok(da.tokps || '');
+          default:
+            return (da.name || '').localeCompare(db.name || '');
+        }
+      });
+      for (const card of sorted) container.appendChild(card);
+
+      if (status) status.textContent = `Showing ${visible} of ${cards.length} models`;
+    }
+
+    [search, cat, fit, runtime, sort].forEach((el) => {
+      el?.addEventListener('input', apply);
+      el?.addEventListener('change', apply);
+    });
+
+    apply();
+  }
+</script>

@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  dataset:
+    name: Validate dataset
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate data/models.json
+        run: |
+          node -e "
+          const d = require('./data/models.json');
+          const errs = [];
+          const catIds = new Set(d.categories.map(c => c.id));
+          const seen = new Set();
+          const required = ['id','name','category','params','paramsB','context','license','source','summary','why','fit','recommended','quants','runtimes'];
+          for (const m of d.models) {
+            for (const k of required) if (m[k] === undefined) errs.push(m.id + ': missing ' + k);
+            if (!catIds.has(m.category)) errs.push(m.id + ': unknown category ' + m.category);
+            if (seen.has(m.id)) errs.push(m.id + ': duplicate id');
+            seen.add(m.id);
+            if (!['full','tight','offload'].includes(m.fit)) errs.push(m.id + ': bad fit ' + m.fit);
+            if (!Array.isArray(m.quants) || m.quants.length === 0) errs.push(m.id + ': no quants');
+          }
+          if (errs.length) { console.error(errs.join('\n')); process.exit(1); }
+          console.log('OK: ' + d.models.length + ' models / ' + d.categories.length + ' categories');
+          "
+
+  site:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        working-directory: web
+        run: npm ci
+
+      - name: Build
+        working-directory: web
+        run: npm run build
+
+  docs-sync:
+    name: Docs in sync
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Regenerate docs from data/models.json
+        shell: pwsh
+        run: ./scripts/build-docs.ps1
+
+      - name: Fail if generated docs are out of date
+        shell: pwsh
+        run: |
+          $changed = git status --porcelain
+          if ($changed) {
+            Write-Host $changed
+            git --no-pager diff
+            throw "Generated docs are out of date. Run ./scripts/build-docs.ps1 and commit the result."
+          }
+          Write-Host "Docs are in sync."

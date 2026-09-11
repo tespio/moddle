@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import FilterBar from '../../components/FilterBar.astro';
+import ModelCard from '../../components/ModelCard.astro';
+import { models } from '../../lib/models';
+import { withBase } from '../../lib/site';
+---
+
+<Base
+  title="All models"
+  description="Every local AI model in moddle that runs on a 16 GB VRAM GPU, filterable by task, fit, and runtime."
+>
+  <section class="section">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href={withBase('/')}>Home</a> <span>/</span> <span>Models</span>
+      </nav>
+
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">● catalogue</span>
+          <h2>All {models.length} models</h2>
+          <p>Filter by task, how well it fits, and the runtime you use.</p>
+        </div>
+      </div>
+
+      <FilterBar />
+
+      <div class="grid grid-cards" id="cards">
+        {models.map((m) => <ModelCard model={m} />)}
+      </div>
+    </div>
+  </section>
+</Base>

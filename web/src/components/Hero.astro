@@ -1,0 +1,49 @@
+---
+import { withBase } from '../lib/site';
+import { hardware, models, categories, meta } from '../lib/models';
+
+const stats = [
+  { v: String(models.length), k: 'curated models' },
+  { v: `${hardware.vramGB} GB`, k: 'target VRAM' },
+  { v: `${hardware.usableVramGB} GB`, k: 'usable after overhead' },
+  { v: `${hardware.bandwidthGBs} GB/s`, k: 'memory bandwidth' },
+  { v: String(categories.length), k: 'workloads covered' },
+];
+---
+
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">● local AI · {meta.target}</span>
+    <h1>Because your GPU has <span class="gradient-text">16 GB</span>, not infinite.</h1>
+    <p class="lede">
+      A curated list of the best local models that actually fit an RTX 4070 Ti
+      Super — with honest VRAM math, the right quantization, and copy-ready
+      commands for every runtime.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn btn-primary" href={withBase('/models/')}>Browse all models →</a>
+      <a class="btn btn-ghost" href="#calculator">Check what fits</a>
+    </div>
+
+    <div class="spec-strip">
+      <span class="spec-pill"><span class="dot"></span><strong>{hardware.gpu}</strong></span>
+      <span class="spec-pill"><strong>{hardware.ramGB} GB</strong> {hardware.ramType}</span>
+      <span class="spec-pill"><strong>{hardware.storage}</strong></span>
+      <span class="spec-pill">Ollama · LM Studio · llama.cpp · vLLM · ComfyUI</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="stats">
+      {stats.map((s) => (
+        <div class="stat">
+          <div class="v">{s.v}</div>
+          <div class="k">{s.k}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

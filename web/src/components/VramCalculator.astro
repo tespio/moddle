@@ -1,0 +1,176 @@
+---
+import { models, hardware } from '../lib/models';
+
+const payload = models.map((m) => ({
+  id: m.id,
+  name: m.name,
+  context: m.context,
+  kv: m.kvPerTokenMB,
+  quants: m.quants.map((q) => ({ quant: q.quant, vram: q.vram })),
+}));
+
+const usable = hardware.usableVramGB;
+const vram = hardware.vramGB;
+---
+
+<section class="section" id="calculator">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">● interactive</span>
+        <h2>Will it fit?</h2>
+        <p>Weights plus KV cache versus your {usable} GB usable VRAM.</p>
+      </div>
+    </div>
+
+    <div class="calc" id="calc" data-usable={usable} data-vram={vram}>
+      <script type="application/json" id="calc-data" set:html={JSON.stringify(payload)}></script>
+
+      <div class="calc-controls">
+        <div class="field">
+          <label for="calc-model">Model</label>
+          <select id="calc-model"></select>
+        </div>
+
+        <div class="field">
+          <label for="calc-quant">Quantization</label>
+          <select id="calc-quant"></select>
+        </div>
+
+        <div class="field">
+          <label for="calc-ctx">Context: <span id="calc-ctx-val">8K</span> tokens</label>
+          <input id="calc-ctx" type="range" min="1024" max="32768" step="1024" value="8192" />
+        </div>
+
+        <p class="muted" style="font-size:.82rem;margin:0">
+          Estimates only. Real usage varies with runtime overhead, batch size, and
+          display VRAM.
+        </p>
+      </div>
+
+      <div class="calc-readout">
+        <div class="calc-total"><span id="calc-total">—</span> <span>GB in VRAM</span></div>
+        <div id="calc-verdict"><span class="fit fit-full">—</span></div>
+        <div class="vram-bar" aria-hidden="true"><i id="calc-bar" style="width:0%"></i></div>
+        <div class="calc-breakdown">
+          <div class="item"><div class="k">Weights</div><div class="v" id="calc-weights">—</div></div>
+          <div class="item"><div class="k">KV cache</div><div class="v" id="calc-kv">—</div></div>
+          <div class="item"><div class="k">Headroom</div><div class="v" id="calc-headroom">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  interface Quant {
+    quant: string;
+    vram: number;
+  }
+  interface Item {
+    id: string;
+    name: string;
+    context: number;
+    kv: number | null;
+    quants: Quant[];
+  }
+
+  const root = document.getElementById('calc');
+  const dataEl = document.getElementById('calc-data');
+  if (root && dataEl) {
+    const items: Item[] = JSON.parse(dataEl.textContent || '[]');
+    const usable = parseFloat(root.dataset.usable || '14.75');
+    const vram = parseFloat(root.dataset.vram || '16');
+
+    const modelSel = document.getElementById('calc-model') as HTMLSelectElement;
+    const quantSel = document.getElementById('calc-quant') as HTMLSelectElement;
+    const ctx = document.getElementById('calc-ctx') as HTMLInputElement;
+    const ctxVal = document.getElementById('calc-ctx-val');
+    const totalEl = document.getElementById('calc-total');
+    const verdictEl = document.getElementById('calc-verdict');
+    const bar = document.getElementById('calc-bar');
+    const weightsEl = document.getElementById('calc-weights');
+    const kvEl = document.getElementById('calc-kv');
+    const headroomEl = document.getElementById('calc-headroom');
+
+    const fmtK = (n: number) => (n >= 1024 ? `${Math.round(n / 1024)}K` : `${n}`);
+
+    modelSel.innerHTML = items
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((m) => `<option value="${m.id}">${m.name}</option>`)
+      .join('');
+
+    function current(): Item {
+      return items.find((m) => m.id === modelSel.value) || items[0];
+    }
+
+    function fillQuants() {
+      const m = current();
+      quantSel.innerHTML = m.quants
+        .map((q) => `<option value="${q.quant}">${q.quant} — ${q.vram} GB</option>`)
+        .join('');
+      const rec = m.quants.find((q) => q.quant === m.quants[0]?.quant) || m.quants[0];
+      if (rec) quantSel.value = rec.quant;
+
+      const hasKv = !!m.kv && m.kv > 0;
+      ctx.disabled = !hasKv;
+      ctx.max = String(hasKv ? Math.max(m.context, 2048) : 0);
+      if (hasKv) ctx.value = String(Math.min(8192, m.context));
+      if (ctxVal) ctxVal.textContent = hasKv ? fmtK(parseInt(ctx.value, 10)) : 'n/a';
+
+      compute();
+    }
+
+    function compute() {
+      const m = current();
+      const q = m.quants.find((x) => x.quant === quantSel.value) || m.quants[0];
+      const weights = q ? q.vram : 0;
+      const ctxTokens = m.kv && m.kv > 0 ? parseInt(ctx.value, 10) : 0;
+      const kvGB = m.kv ? (m.kv * ctxTokens) / 1024 : 0;
+      const total = weights + kvGB;
+      const headroom = usable - total;
+
+      if (totalEl) totalEl.textContent = total.toFixed(1);
+      if (weightsEl) weightsEl.textContent = `${weights.toFixed(1)} GB`;
+      if (kvEl) kvEl.textContent = kvGB > 0 ? `${kvGB.toFixed(1)} GB` : '—';
+      if (headroomEl) {
+        headroomEl.textContent = `${headroom >= 0 ? '' : '+'}${Math.abs(headroom).toFixed(1)} GB`;
+        (headroomEl as HTMLElement).style.color =
+          headroom < 0 ? 'var(--bad)' : headroom < 1 ? 'var(--warn)' : 'var(--good)';
+      }
+
+      const pct = Math.min(100, (total / vram) * 100);
+      if (bar) {
+        bar.style.width = `${pct}%`;
+        bar.style.background =
+          total > usable
+            ? 'linear-gradient(90deg,#fb7185,#f472b6)'
+            : total > usable - 1
+              ? 'linear-gradient(90deg,#fbbf24,#fb7185)'
+              : 'linear-gradient(90deg,var(--accent),var(--accent-2))';
+      }
+
+      if (verdictEl) {
+        const [cls, label] =
+          total <= usable - 1
+            ? ['full', 'Fits fully']
+            : total <= usable
+              ? ['tight', 'Tight fit']
+              : ['offload', 'Needs offload'];
+        verdictEl.innerHTML = `<span class="fit fit-${cls}">${label}</span>`;
+      }
+    }
+
+    modelSel.addEventListener('change', fillQuants);
+    quantSel.addEventListener('change', compute);
+    ctx.addEventListener('input', () => {
+      if (ctxVal) ctxVal.textContent = fmtK(parseInt(ctx.value, 10));
+      compute();
+    });
+
+    const preferred = items.find((m) => m.id === 'qwen3-14b') || items[0];
+    if (preferred) modelSel.value = preferred.id;
+    fillQuants();
+  }
+</script>

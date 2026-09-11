@@ -1,0 +1,1015 @@
+{
+  "meta": {
+    "name": "moddle",
+    "tagline": "Because your GPU has 16 GB, not infinite.",
+    "target": "NVIDIA RTX 4070 Ti Super 16 GB",
+    "version": "0.1.0",
+    "license": { "code": "MIT", "content": "CC-BY-4.0" },
+    "note": "VRAM figures are estimates for weights only unless a context is given. KV cache scales with context length. Measured throughput varies by runtime, driver, and settings."
+  },
+  "hardware": {
+    "gpu": "RTX 4070 Ti Super",
+    "vramGB": 16,
+    "usableVramGB": 14.75,
+    "bandwidthGBs": 672,
+    "ramGB": 32,
+    "ramType": "DDR5",
+    "storage": "NVMe SSD"
+  },
+  "categories": [
+    {
+      "id": "chat",
+      "name": "Chat & General",
+      "icon": "message-circle",
+      "blurb": "Everyday assistants, reasoning, and general-purpose conversation."
+    },
+    {
+      "id": "coding",
+      "name": "Coding",
+      "icon": "code",
+      "blurb": "Code generation, completion, refactoring, and local coding agents."
+    },
+    {
+      "id": "vision",
+      "name": "Vision & Multimodal",
+      "icon": "eye",
+      "blurb": "Image understanding, OCR, screenshots, and document parsing."
+    },
+    {
+      "id": "image-generation",
+      "name": "Image & Video Generation",
+      "icon": "image",
+      "blurb": "Diffusion models for stills and short video via ComfyUI."
+    },
+    {
+      "id": "voice",
+      "name": "Voice (STT / TTS)",
+      "icon": "mic",
+      "blurb": "Speech-to-text transcription and text-to-speech synthesis."
+    },
+    {
+      "id": "embeddings-rag",
+      "name": "RAG & Embeddings",
+      "icon": "database",
+      "blurb": "Embedding and reranker models for local document search."
+    }
+  ],
+  "models": [
+    {
+      "id": "qwen3-14b",
+      "name": "Qwen3-14B",
+      "family": "Qwen",
+      "category": "chat",
+      "params": "14B",
+      "paramsB": 14,
+      "activeParamsB": 14,
+      "context": 32768,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/Qwen/Qwen3-14B",
+      "summary": "Dense 14B generalist with switchable thinking mode and strong multilingual and reasoning performance.",
+      "why": "The best all-round dense model that fits fully at Q5/Q6 on 16 GB. Punches far above its size.",
+      "fit": "full",
+      "recommended": { "quant": "Q5_K_M", "vram": 10.5, "kv8k": 1.25 },
+      "kvPerTokenMB": 0.156,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 8.5, "note": "Fastest, small quality drop." },
+        { "quant": "Q5_K_M", "vram": 10.5, "note": "Sweet spot. Fits with 32K context." },
+        { "quant": "Q6_K", "vram": 12.2, "note": "Near-lossless; still fully resident." },
+        { "quant": "Q8_0", "vram": 15.0, "note": "Tight; use short contexts or light offload." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen3:14b",
+        "lmstudio": "Search \"Qwen3 14B GGUF\"",
+        "llamacpp": "llama-cli -hf bartowski/Qwen_Qwen3-14B-GGUF:Q5_K_M -c 32768 -ngl 99",
+        "vllm": "vllm serve Qwen/Qwen3-14B --max-model-len 32768"
+      },
+      "tokps": "35-55",
+      "released": 2025,
+      "tags": ["reasoning", "multilingual", "thinking"]
+    },
+    {
+      "id": "mistral-small-3.1-24b",
+      "name": "Mistral Small 3.1 24B",
+      "family": "Mistral",
+      "category": "chat",
+      "params": "24B",
+      "paramsB": 24,
+      "activeParamsB": 24,
+      "context": 131072,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+      "summary": "24B instruction model with 128K context, tool calling, and vision support.",
+      "why": "The largest dense model that still fits fully at Q4_K_M with room for a real context window.",
+      "fit": "tight",
+      "recommended": { "quant": "Q4_K_M", "vram": 14.0, "kv8k": 1.25 },
+      "kvPerTokenMB": 0.156,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 14.0, "note": "Fits fully with ~8-16K context." },
+        { "quant": "Q4_K_S", "vram": 13.2, "note": "More context headroom." },
+        { "quant": "Q5_K_M", "vram": 16.5, "note": "Needs light offload." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run mistral-small3.1:24b",
+        "lmstudio": "Search \"Mistral Small 3.1 24B GGUF\"",
+        "llamacpp": "llama-cli -hf bartowski/mistralai_Mistral-Small-3.1-24B-Instruct-2503-GGUF:Q4_K_M -c 16384 -ngl 99",
+        "vllm": "vllm serve mistralai/Mistral-Small-3.1-24B-Instruct-2503 --max-model-len 32768"
+      },
+      "tokps": "28-40",
+      "released": 2025,
+      "tags": ["tools", "vision", "long-context"]
+    },
+    {
+      "id": "gemma-3-12b",
+      "name": "Gemma 3 12B",
+      "family": "Gemma",
+      "category": "chat",
+      "params": "12B",
+      "paramsB": 12,
+      "activeParamsB": 12,
+      "context": 131072,
+      "license": "gemma",
+      "source": "https://huggingface.co/google/gemma-3-12b-it",
+      "summary": "Google's 12B open model with vision and a 128K context window, tuned for helpful assistant behavior.",
+      "why": "Great quality-per-gigabyte and multimodal out of the box. Comfortable at Q6_K.",
+      "fit": "full",
+      "recommended": { "quant": "Q6_K", "vram": 10.2, "kv8k": 3.0 },
+      "kvPerTokenMB": 0.375,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 7.3, "note": "Very light, lots of context room." },
+        { "quant": "Q6_K", "vram": 10.2, "note": "Recommended." },
+        { "quant": "Q8_0", "vram": 12.8, "note": "Heavy KV; keep context modest." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run gemma3:12b",
+        "lmstudio": "Search \"Gemma 3 12B GGUF\"",
+        "llamacpp": "llama-cli -hf bartowski/google_gemma-3-12b-it-GGUF:Q6_K -c 16384 -ngl 99",
+        "vllm": "vllm serve google/gemma-3-12b-it --max-model-len 32768"
+      },
+      "tokps": "40-60",
+      "released": 2025,
+      "tags": ["vision", "long-context"]
+    },
+    {
+      "id": "gpt-oss-20b",
+      "name": "gpt-oss-20b",
+      "family": "OpenAI",
+      "category": "chat",
+      "params": "21B (3.6B active)",
+      "paramsB": 21,
+      "activeParamsB": 3.6,
+      "context": 131072,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/openai/gpt-oss-20b",
+      "summary": "OpenAI's open-weight MoE designed to run in ~16 GB with MXFP4 and a 128K context.",
+      "why": "Purpose-built for this class of hardware. MoE keeps it extremely fast while fitting fully.",
+      "fit": "full",
+      "recommended": { "quant": "MXFP4", "vram": 13.0, "kv8k": 0.8 },
+      "kvPerTokenMB": 0.1,
+      "quants": [
+        { "quant": "MXFP4", "vram": 13.0, "note": "Native format. Fits with long context." },
+        { "quant": "Q8_0", "vram": 22.0, "note": "Offload required." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run gpt-oss:20b",
+        "lmstudio": "Search \"gpt-oss-20b\"",
+        "llamacpp": "llama-cli -hf ggml-org/gpt-oss-20b-GGUF:MXFP4 -c 32768 -ngl 99",
+        "vllm": "vllm serve openai/gpt-oss-20b --max-model-len 32768"
+      },
+      "tokps": "70-110",
+      "released": 2025,
+      "tags": ["moe", "reasoning", "tools", "fast"]
+    },
+    {
+      "id": "qwen3-30b-a3b",
+      "name": "Qwen3-30B-A3B",
+      "family": "Qwen",
+      "category": "chat",
+      "params": "30B (3B active)",
+      "paramsB": 30,
+      "activeParamsB": 3,
+      "context": 32768,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/Qwen/Qwen3-30B-A3B",
+      "summary": "MoE with only 3B active parameters, giving 30B-class quality at small-model speed.",
+      "why": "The best quality-per-token on this list. Runs fast even when a few layers spill to system RAM.",
+      "fit": "offload",
+      "recommended": { "quant": "Q4_K_M", "vram": 17.5, "kv8k": 1.5 },
+      "kvPerTokenMB": 0.1875,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 17.5, "note": "Slight offload; still very fast." },
+        { "quant": "Q3_K_M", "vram": 14.5, "note": "Fits fully; small quality cost." },
+        { "quant": "Q5_K_M", "vram": 21.0, "note": "More offload, higher quality." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen3:30b-a3b",
+        "lmstudio": "Search \"Qwen3 30B A3B GGUF\"",
+        "llamacpp": "llama-cli -hf unsloth/Qwen3-30B-A3B-GGUF:Q4_K_M -c 32768 -ngl 40",
+        "vllm": "vllm serve Qwen/Qwen3-30B-A3B --max-model-len 32768"
+      },
+      "tokps": "60-100",
+      "released": 2025,
+      "tags": ["moe", "reasoning", "fast", "offload"]
+    },
+    {
+      "id": "deepseek-r1-distill-qwen-14b",
+      "name": "DeepSeek-R1-Distill-Qwen-14B",
+      "family": "DeepSeek",
+      "category": "chat",
+      "params": "14B",
+      "paramsB": 14,
+      "activeParamsB": 14,
+      "context": 65536,
+      "license": "mit",
+      "source": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+      "summary": "Distilled reasoning model that thinks step-by-step before answering.",
+      "why": "Strong chain-of-thought reasoning that fits fully at Q5. Great for math and logic.",
+      "fit": "full",
+      "recommended": { "quant": "Q5_K_M", "vram": 10.5, "kv8k": 1.25 },
+      "kvPerTokenMB": 0.156,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 8.5, "note": "Fast reasoning." },
+        { "quant": "Q5_K_M", "vram": 10.5, "note": "Recommended." },
+        { "quant": "Q6_K", "vram": 12.2, "note": "Max quality while resident." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run deepseek-r1:14b",
+        "lmstudio": "Search \"DeepSeek R1 Distill Qwen 14B GGUF\"",
+        "llamacpp": "llama-cli -hf bartowski/DeepSeek-R1-Distill-Qwen-14B-GGUF:Q5_K_M -c 32768 -ngl 99",
+        "vllm": "vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-14B --max-model-len 32768"
+      },
+      "tokps": "35-55",
+      "released": 2025,
+      "tags": ["reasoning", "math"]
+    },
+    {
+      "id": "llama-3.1-8b",
+      "name": "Llama 3.1 8B",
+      "family": "Llama",
+      "category": "chat",
+      "params": "8B",
+      "paramsB": 8,
+      "activeParamsB": 8,
+      "context": 131072,
+      "license": "llama3.1",
+      "source": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
+      "summary": "The dependable 8B baseline with a 128K context and a huge ecosystem.",
+      "why": "Maximum headroom: run it at Q8 with a long context and still have VRAM to spare.",
+      "fit": "full",
+      "recommended": { "quant": "Q8_0", "vram": 8.5, "kv8k": 2.0 },
+      "kvPerTokenMB": 0.25,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 4.9, "note": "Ultra light and fast." },
+        { "quant": "Q8_0", "vram": 8.5, "note": "Recommended. Near-lossless." },
+        { "quant": "FP16", "vram": 16.0, "note": "Exactly at the limit; not worth it." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run llama3.1:8b",
+        "lmstudio": "Search \"Llama 3.1 8B Instruct GGUF\"",
+        "llamacpp": "llama-cli -hf bartowski/Meta-Llama-3.1-8B-Instruct-GGUF:Q8_0 -c 32768 -ngl 99",
+        "vllm": "vllm serve meta-llama/Llama-3.1-8B-Instruct --max-model-len 32768"
+      },
+      "tokps": "60-90",
+      "released": 2024,
+      "tags": ["general", "long-context", "baseline"]
+    },
+
+    {
+      "id": "qwen2.5-coder-14b",
+      "name": "Qwen2.5-Coder-14B",
+      "family": "Qwen",
+      "category": "coding",
+      "params": "14B",
+      "paramsB": 14,
+      "activeParamsB": 14,
+      "context": 32768,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/Qwen/Qwen2.5-Coder-14B-Instruct",
+      "summary": "Dedicated coding model with strong fill-in-the-middle and repo-level ability.",
+      "why": "The best fully-resident coding model on 16 GB. Ideal for editor copilots and agents.",
+      "fit": "full",
+      "recommended": { "quant": "Q5_K_M", "vram": 10.5, "kv8k": 3.0 },
+      "kvPerTokenMB": 0.375,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 8.5, "note": "Fast completion." },
+        { "quant": "Q5_K_M", "vram": 10.5, "note": "Recommended." },
+        { "quant": "Q6_K", "vram": 12.2, "note": "Keep context <= 16K." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen2.5-coder:14b",
+        "lmstudio": "Search \"Qwen2.5 Coder 14B GGUF\"",
+        "llamacpp": "llama-cli -hf bartowski/Qwen2.5-Coder-14B-Instruct-GGUF:Q5_K_M -c 32768 -ngl 99",
+        "vllm": "vllm serve Qwen/Qwen2.5-Coder-14B-Instruct --max-model-len 32768"
+      },
+      "tokps": "35-55",
+      "released": 2024,
+      "tags": ["coding", "fim", "agents"]
+    },
+    {
+      "id": "qwen3-coder-30b-a3b",
+      "name": "Qwen3-Coder-30B-A3B",
+      "family": "Qwen",
+      "category": "coding",
+      "params": "30B (3B active)",
+      "paramsB": 30,
+      "activeParamsB": 3,
+      "context": 262144,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct",
+      "summary": "MoE coding model with agentic tool use and a huge native context.",
+      "why": "Near-frontier coding quality at 3B active speed. The best coding agent you can self-host here.",
+      "fit": "offload",
+      "recommended": { "quant": "Q4_K_M", "vram": 17.5, "kv8k": 1.5 },
+      "kvPerTokenMB": 0.1875,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 17.5, "note": "Slight offload; very fast." },
+        { "quant": "Q3_K_M", "vram": 14.5, "note": "Fully resident, small quality cost." },
+        { "quant": "Q5_K_M", "vram": 21.0, "note": "Higher quality, more offload." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen3-coder:30b",
+        "lmstudio": "Search \"Qwen3 Coder 30B A3B GGUF\"",
+        "llamacpp": "llama-cli -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q4_K_M -c 65536 -ngl 40",
+        "vllm": "vllm serve Qwen/Qwen3-Coder-30B-A3B-Instruct --max-model-len 65536"
+      },
+      "tokps": "60-100",
+      "released": 2025,
+      "tags": ["coding", "moe", "agents", "offload"]
+    },
+    {
+      "id": "deepseek-coder-v2-lite",
+      "name": "DeepSeek-Coder-V2-Lite",
+      "family": "DeepSeek",
+      "category": "coding",
+      "params": "16B (2.4B active)",
+      "paramsB": 16,
+      "activeParamsB": 2.4,
+      "context": 131072,
+      "license": "deepseek",
+      "source": "https://huggingface.co/deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct",
+      "summary": "MoE coding model that fits fully and supports 338 programming languages.",
+      "why": "Excellent coding quality while staying entirely in VRAM at Q5. Great long-context repo work.",
+      "fit": "full",
+      "recommended": { "quant": "Q5_K_M", "vram": 11.5, "kv8k": 0.8 },
+      "kvPerTokenMB": 0.1,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 9.6, "note": "Recommended for speed." },
+        { "quant": "Q5_K_M", "vram": 11.5, "note": "Fully resident, more context." },
+        { "quant": "Q8_0", "vram": 17.0, "note": "Offload required." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run deepseek-coder-v2:16b",
+        "lmstudio": "Search \"DeepSeek Coder V2 Lite GGUF\"",
+        "llamacpp": "llama-cli -hf bartowski/DeepSeek-Coder-V2-Lite-Instruct-GGUF:Q5_K_M -c 32768 -ngl 99",
+        "vllm": "vllm serve deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct --max-model-len 32768"
+      },
+      "tokps": "55-85",
+      "released": 2024,
+      "tags": ["coding", "moe", "fast"]
+    },
+    {
+      "id": "codestral-22b",
+      "name": "Codestral 22B",
+      "family": "Mistral",
+      "category": "coding",
+      "params": "22B",
+      "paramsB": 22,
+      "activeParamsB": 22,
+      "context": 32768,
+      "license": "mnc-research",
+      "source": "https://huggingface.co/mistralai/Codestral-22B-v0.1",
+      "summary": "Mistral's code specialist with strong completion and 80+ language coverage.",
+      "why": "Fits fully at Q4 and produces clean, idiomatic code across many languages.",
+      "fit": "full",
+      "recommended": { "quant": "Q4_K_M", "vram": 13.0, "kv8k": 2.5 },
+      "kvPerTokenMB": 0.3,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 13.0, "note": "Recommended. Fits with context." },
+        { "quant": "Q4_K_S", "vram": 12.2, "note": "A bit more room." },
+        { "quant": "Q5_K_M", "vram": 15.3, "note": "Tight; short contexts only." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run codestral:22b",
+        "lmstudio": "Search \"Codestral 22B GGUF\"",
+        "llamacpp": "llama-cli -hf bartowski/Codestral-22B-v0.1-GGUF:Q4_K_M -c 16384 -ngl 99",
+        "vllm": "vllm serve mistralai/Codestral-22B-v0.1 --max-model-len 16384"
+      },
+      "tokps": "28-42",
+      "released": 2024,
+      "tags": ["coding", "completion"]
+    },
+    {
+      "id": "qwen2.5-coder-7b",
+      "name": "Qwen2.5-Coder-7B",
+      "family": "Qwen",
+      "category": "coding",
+      "params": "7B",
+      "paramsB": 7,
+      "activeParamsB": 7,
+      "context": 32768,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct",
+      "summary": "Lightweight coding model that leaves VRAM free for long contexts and other tools.",
+      "why": "Perfect for always-on editor autocomplete or when you want to run a second model alongside.",
+      "fit": "full",
+      "recommended": { "quant": "Q8_0", "vram": 7.6, "kv8k": 0.9 },
+      "kvPerTokenMB": 0.109,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 4.4, "note": "Trivial to run." },
+        { "quant": "Q6_K", "vram": 6.2, "note": "Great balance." },
+        { "quant": "Q8_0", "vram": 7.6, "note": "Recommended. Tons of headroom." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen2.5-coder:7b",
+        "lmstudio": "Search \"Qwen2.5 Coder 7B GGUF\"",
+        "llamacpp": "llama-cli -hf bartowski/Qwen2.5-Coder-7B-Instruct-GGUF:Q8_0 -c 32768 -ngl 99",
+        "vllm": "vllm serve Qwen/Qwen2.5-Coder-7B-Instruct --max-model-len 32768"
+      },
+      "tokps": "60-90",
+      "released": 2024,
+      "tags": ["coding", "lightweight", "fim"]
+    },
+
+    {
+      "id": "qwen2.5-vl-7b",
+      "name": "Qwen2.5-VL-7B",
+      "family": "Qwen",
+      "category": "vision",
+      "params": "7B",
+      "paramsB": 7,
+      "activeParamsB": 7,
+      "context": 131072,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct",
+      "summary": "Compact vision-language model strong at documents, charts, and grounding.",
+      "why": "Runs fully at Q8 with a long context. The default vision model for 16 GB.",
+      "fit": "full",
+      "recommended": { "quant": "Q8_0", "vram": 8.7, "kv8k": 0.9 },
+      "kvPerTokenMB": 0.109,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 5.0, "note": "Light and fast." },
+        { "quant": "Q6_K", "vram": 7.0, "note": "Balanced." },
+        { "quant": "Q8_0", "vram": 8.7, "note": "Recommended." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen2.5vl:7b",
+        "lmstudio": "Search \"Qwen2.5 VL 7B GGUF\"",
+        "llamacpp": "llama-mtmd-cli -hf ggml-org/Qwen2.5-VL-7B-Instruct-GGUF:Q8_0 --image photo.jpg",
+        "vllm": "vllm serve Qwen/Qwen2.5-VL-7B-Instruct --max-model-len 32768"
+      },
+      "tokps": "45-70",
+      "released": 2025,
+      "tags": ["vision", "ocr", "documents", "grounding"]
+    },
+    {
+      "id": "qwen2.5-vl-32b",
+      "name": "Qwen2.5-VL-32B",
+      "family": "Qwen",
+      "category": "vision",
+      "params": "32B",
+      "paramsB": 32,
+      "activeParamsB": 32,
+      "context": 131072,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/Qwen/Qwen2.5-VL-32B-Instruct",
+      "summary": "Large vision-language model with top-tier document and chart reasoning.",
+      "why": "The strongest vision model you can run with partial offload. Slow but capable.",
+      "fit": "offload",
+      "recommended": { "quant": "Q4_K_M", "vram": 19.0, "kv8k": 4.0 },
+      "kvPerTokenMB": 0.5,
+      "quants": [
+        { "quant": "Q3_K_M", "vram": 15.5, "note": "Near-resident." },
+        { "quant": "Q4_K_M", "vram": 19.0, "note": "Recommended; moderate offload." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen2.5vl:32b",
+        "lmstudio": "Search \"Qwen2.5 VL 32B GGUF\"",
+        "llamacpp": "llama-mtmd-cli -hf ggml-org/Qwen2.5-VL-32B-Instruct-GGUF:Q4_K_M --image photo.jpg -ngl 40",
+        "vllm": "vllm serve Qwen/Qwen2.5-VL-32B-Instruct --max-model-len 32768"
+      },
+      "tokps": "12-22",
+      "released": 2025,
+      "tags": ["vision", "ocr", "offload"]
+    },
+    {
+      "id": "llama-3.2-11b-vision",
+      "name": "Llama 3.2 11B Vision",
+      "family": "Llama",
+      "category": "vision",
+      "params": "11B",
+      "paramsB": 11,
+      "activeParamsB": 11,
+      "context": 131072,
+      "license": "llama3.2",
+      "source": "https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct",
+      "summary": "Meta's 11B multimodal model for image reasoning and captioning.",
+      "why": "Fits fully at Q6 and pairs well with the Llama ecosystem and tooling.",
+      "fit": "full",
+      "recommended": { "quant": "Q6_K", "vram": 9.5, "kv8k": 1.25 },
+      "kvPerTokenMB": 0.156,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 6.8, "note": "Light." },
+        { "quant": "Q6_K", "vram": 9.5, "note": "Recommended." },
+        { "quant": "Q8_0", "vram": 12.0, "note": "Fits with a modest context." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run llama3.2-vision:11b",
+        "lmstudio": "Search \"Llama 3.2 11B Vision GGUF\"",
+        "llamacpp": "llama-mtmd-cli -hf bartowski/Llama-3.2-11B-Vision-Instruct-GGUF:Q6_K --image photo.jpg",
+        "vllm": "vllm serve meta-llama/Llama-3.2-11B-Vision-Instruct --max-model-len 32768"
+      },
+      "tokps": "35-55",
+      "released": 2024,
+      "tags": ["vision", "captioning"]
+    },
+    {
+      "id": "minicpm-v-2.6",
+      "name": "MiniCPM-V 2.6",
+      "family": "OpenBMB",
+      "category": "vision",
+      "params": "8B",
+      "paramsB": 8,
+      "activeParamsB": 8,
+      "context": 32768,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/openbmb/MiniCPM-V-2_6",
+      "summary": "Compact vision model that excels at OCR and multi-image understanding.",
+      "why": "Best-in-class OCR per gigabyte. Fits fully at Q8 and handles dense documents.",
+      "fit": "full",
+      "recommended": { "quant": "Q8_0", "vram": 9.0, "kv8k": 0.9 },
+      "kvPerTokenMB": 0.109,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 5.5, "note": "Very light." },
+        { "quant": "Q6_K", "vram": 7.4, "note": "Balanced." },
+        { "quant": "Q8_0", "vram": 9.0, "note": "Recommended for OCR." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run minicpm-v:8b",
+        "lmstudio": "Search \"MiniCPM-V 2.6 GGUF\"",
+        "llamacpp": "llama-mtmd-cli -hf openbmb/MiniCPM-V-2_6-gguf:Q8_0 --image doc.png",
+        "vllm": "vllm serve openbmb/MiniCPM-V-2_6 --max-model-len 32768"
+      },
+      "tokps": "45-70",
+      "released": 2024,
+      "tags": ["vision", "ocr", "documents"]
+    },
+    {
+      "id": "gemma-3-27b",
+      "name": "Gemma 3 27B",
+      "family": "Gemma",
+      "category": "vision",
+      "params": "27B",
+      "paramsB": 27,
+      "activeParamsB": 27,
+      "context": 131072,
+      "license": "gemma",
+      "source": "https://huggingface.co/google/gemma-3-27b-it",
+      "summary": "Google's 27B multimodal model with a 128K context and strong reasoning.",
+      "why": "A capable multimodal generalist at Q4. Dense KV cache means context is a real constraint.",
+      "fit": "tight",
+      "recommended": { "quant": "Q4_K_M", "vram": 16.0, "kv8k": 3.9 },
+      "kvPerTokenMB": 0.484,
+      "quants": [
+        { "quant": "Q3_K_M", "vram": 13.5, "note": "Fully resident option." },
+        { "quant": "Q4_K_M", "vram": 16.0, "note": "Very tight; short context." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run gemma3:27b",
+        "lmstudio": "Search \"Gemma 3 27B GGUF\"",
+        "llamacpp": "llama-mtmd-cli -hf bartowski/google_gemma-3-27b-it-GGUF:Q3_K_M -c 8192 -ngl 99",
+        "vllm": "vllm serve google/gemma-3-27b-it --max-model-len 16384"
+      },
+      "tokps": "18-30",
+      "released": 2025,
+      "tags": ["vision", "long-context", "tight"]
+    },
+
+    {
+      "id": "sdxl",
+      "name": "SDXL / SDXL-Turbo",
+      "family": "Stability AI",
+      "category": "image-generation",
+      "params": "3.5B (UNet+text encoders)",
+      "paramsB": 3.5,
+      "context": 0,
+      "license": "openrail++",
+      "source": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0",
+      "summary": "The workhorse 1024px image model with a massive ecosystem of LoRAs and ControlNets.",
+      "why": "Fast and extremely flexible. Runs comfortably on 16 GB with room for high-res upscaling.",
+      "fit": "full",
+      "recommended": { "quant": "fp16", "vram": 7.5, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp16", "vram": 7.5, "note": "Standard. Plenty of headroom." },
+        { "quant": "fp8", "vram": 4.5, "note": "Even lighter." }
+      ],
+      "runtimes": {
+        "comfyui": "Load SDXL checkpoint + recommended workflows",
+        "other": "A1111 / Forge / ComfyUI"
+      },
+      "tokps": "n/a",
+      "released": 2023,
+      "tags": ["diffusion", "lora", "controlnet", "1024px"]
+    },
+    {
+      "id": "flux-1-schnell",
+      "name": "FLUX.1 [schnell]",
+      "family": "Black Forest Labs",
+      "category": "image-generation",
+      "params": "12B",
+      "paramsB": 12,
+      "context": 0,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/black-forest-labs/FLUX.1-schnell",
+      "summary": "Distilled 4-step FLUX variant with excellent prompt following and text rendering.",
+      "why": "Near-FLUX quality in a few steps. Fits fully at fp8; the best fast image model here.",
+      "fit": "full",
+      "recommended": { "quant": "fp8", "vram": 11.5, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp8", "vram": 11.5, "note": "Recommended." },
+        { "quant": "GGUF Q8", "vram": 12.5, "note": "ComfyUI GGUF nodes." },
+        { "quant": "GGUF Q4", "vram": 7.0, "note": "Lighter, slight quality loss." }
+      ],
+      "runtimes": {
+        "comfyui": "FLUX.1-schnell fp8 checkpoint, 4 steps, euler",
+        "other": "ComfyUI / diffusers"
+      },
+      "tokps": "n/a",
+      "released": 2024,
+      "tags": ["diffusion", "flux", "fast", "text"]
+    },
+    {
+      "id": "flux-1-dev",
+      "name": "FLUX.1 [dev]",
+      "family": "Black Forest Labs",
+      "category": "image-generation",
+      "params": "12B",
+      "paramsB": 12,
+      "context": 0,
+      "license": "flux-1-dev-non-commercial",
+      "source": "https://huggingface.co/black-forest-labs/FLUX.1-dev",
+      "summary": "The flagship open FLUX model with the best prompt adherence and realism.",
+      "why": "Top-tier quality at Q8/tight. Use GGUF quants to fit and accept slower, bigger steps.",
+      "fit": "tight",
+      "recommended": { "quant": "GGUF Q8", "vram": 12.5, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp8", "vram": 13.5, "note": "Tight but works at 1024px." },
+        { "quant": "GGUF Q8", "vram": 12.5, "note": "Recommended." },
+        { "quant": "GGUF Q4", "vram": 7.0, "note": "Most headroom." }
+      ],
+      "runtimes": {
+        "comfyui": "FLUX.1-dev GGUF Q8 + t5xxl fp8 + clip_l",
+        "other": "ComfyUI / diffusers"
+      },
+      "tokps": "n/a",
+      "released": 2024,
+      "tags": ["diffusion", "flux", "quality"]
+    },
+    {
+      "id": "sd-3.5-medium",
+      "name": "Stable Diffusion 3.5 Medium",
+      "family": "Stability AI",
+      "category": "image-generation",
+      "params": "2.5B",
+      "paramsB": 2.5,
+      "context": 0,
+      "license": "stability-community",
+      "source": "https://huggingface.co/stabilityai/stable-diffusion-3.5-medium",
+      "summary": "Balanced MMDiT model optimized for consumer hardware at 1024px.",
+      "why": "Fast, high quality, and light. A great complement to SDXL when you want better text.",
+      "fit": "full",
+      "recommended": { "quant": "fp16", "vram": 9.0, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp16", "vram": 9.0, "note": "Recommended." },
+        { "quant": "fp8", "vram": 6.0, "note": "Lighter." }
+      ],
+      "runtimes": {
+        "comfyui": "SD3.5 Medium checkpoint workflow",
+        "other": "ComfyUI / diffusers"
+      },
+      "tokps": "n/a",
+      "released": 2024,
+      "tags": ["diffusion", "sd3", "1024px"]
+    },
+    {
+      "id": "wan-2.1-1.3b",
+      "name": "Wan 2.1 T2V-1.3B",
+      "family": "Alibaba Wan",
+      "category": "image-generation",
+      "params": "1.3B",
+      "paramsB": 1.3,
+      "context": 0,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B",
+      "summary": "Lightweight text-to-video model that can run on consumer GPUs.",
+      "why": "One of the few real video generators that fits 16 GB. Short clips at 480p.",
+      "fit": "full",
+      "recommended": { "quant": "fp16", "vram": 8.0, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp16", "vram": 8.0, "note": "480p, few-second clips." }
+      ],
+      "runtimes": {
+        "comfyui": "Wan 2.1 1.3B ComfyUI workflow",
+        "other": "ComfyUI / diffusers"
+      },
+      "tokps": "n/a",
+      "released": 2025,
+      "tags": ["video", "diffusion", "t2v"]
+    },
+    {
+      "id": "ltx-video-2b",
+      "name": "LTX-Video 2B",
+      "family": "Lightricks",
+      "category": "image-generation",
+      "params": "2B",
+      "paramsB": 2,
+      "context": 0,
+      "license": "openrail",
+      "source": "https://huggingface.co/Lightricks/LTX-Video",
+      "summary": "Real-time-oriented video model that generates clips quickly.",
+      "why": "Fast video on 16 GB with a lean footprint, good for experiments and img2vid.",
+      "fit": "full",
+      "recommended": { "quant": "fp16", "vram": 8.0, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp16", "vram": 8.0, "note": "Recommended." },
+        { "quant": "fp8", "vram": 5.0, "note": "Lighter." }
+      ],
+      "runtimes": {
+        "comfyui": "LTX-Video ComfyUI workflow",
+        "other": "ComfyUI / diffusers"
+      },
+      "tokps": "n/a",
+      "released": 2024,
+      "tags": ["video", "diffusion", "img2vid", "fast"]
+    },
+
+    {
+      "id": "whisper-large-v3-turbo",
+      "name": "Whisper large-v3-turbo",
+      "family": "OpenAI",
+      "category": "voice",
+      "params": "809M",
+      "paramsB": 0.8,
+      "context": 0,
+      "license": "mit",
+      "source": "https://huggingface.co/openai/whisper-large-v3-turbo",
+      "summary": "Distilled Whisper with near-large accuracy at 8x the speed.",
+      "why": "The best speed/accuracy tradeoff for local transcription. Tiny VRAM footprint.",
+      "fit": "full",
+      "recommended": { "quant": "int8", "vram": 2.0, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "int8", "vram": 2.0, "note": "Recommended." },
+        { "quant": "fp16", "vram": 3.0, "note": "Slightly better accuracy." }
+      ],
+      "runtimes": {
+        "other": "faster-whisper / whisper.cpp / WhisperX",
+        "llamacpp": "whisper-cli -m ggml-large-v3-turbo.bin -f audio.wav"
+      },
+      "tokps": "n/a",
+      "released": 2024,
+      "tags": ["stt", "transcription", "fast"]
+    },
+    {
+      "id": "whisper-large-v3",
+      "name": "Whisper large-v3",
+      "family": "OpenAI",
+      "category": "voice",
+      "params": "1.55B",
+      "paramsB": 1.55,
+      "context": 0,
+      "license": "mit",
+      "source": "https://huggingface.co/openai/whisper-large-v3",
+      "summary": "The reference open speech-to-text model with strong multilingual accuracy.",
+      "why": "When accuracy matters most. Runs via faster-whisper well within 16 GB.",
+      "fit": "full",
+      "recommended": { "quant": "int8", "vram": 3.0, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "int8", "vram": 3.0, "note": "Recommended." },
+        { "quant": "fp16", "vram": 5.0, "note": "Higher accuracy." }
+      ],
+      "runtimes": {
+        "other": "faster-whisper / whisper.cpp / WhisperX",
+        "llamacpp": "whisper-cli -m ggml-large-v3.bin -f audio.wav"
+      },
+      "tokps": "n/a",
+      "released": 2023,
+      "tags": ["stt", "transcription", "multilingual"]
+    },
+    {
+      "id": "kokoro-82m",
+      "name": "Kokoro-82M",
+      "family": "hexgrad",
+      "category": "voice",
+      "params": "82M",
+      "paramsB": 0.082,
+      "context": 0,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+      "summary": "Tiny, high-quality text-to-speech with multiple voices and fast synthesis.",
+      "why": "Best-in-class TTS per byte. Leaves almost all your VRAM free for other models.",
+      "fit": "full",
+      "recommended": { "quant": "fp16", "vram": 0.5, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp16", "vram": 0.5, "note": "Negligible footprint." }
+      ],
+      "runtimes": {
+        "other": "kokoro-onnx / kokoro pipeline",
+        "comfyui": "ComfyUI Kokoro TTS nodes"
+      },
+      "tokps": "n/a",
+      "released": 2025,
+      "tags": ["tts", "lightweight", "voices"]
+    },
+    {
+      "id": "xtts-v2",
+      "name": "XTTS-v2",
+      "family": "Coqui",
+      "category": "voice",
+      "params": "467M",
+      "paramsB": 0.47,
+      "context": 0,
+      "license": "coqui-public",
+      "source": "https://huggingface.co/coqui/XTTS-v2",
+      "summary": "Multilingual TTS with voice cloning from a short reference clip.",
+      "why": "Great voice cloning and 17 languages, and it fits easily in VRAM.",
+      "fit": "full",
+      "recommended": { "quant": "fp16", "vram": 2.5, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp16", "vram": 2.5, "note": "Recommended." }
+      ],
+      "runtimes": {
+        "other": "Coqui TTS / AllTalk",
+        "comfyui": "ComfyUI TTS nodes"
+      },
+      "tokps": "n/a",
+      "released": 2023,
+      "tags": ["tts", "voice-cloning", "multilingual"]
+    },
+    {
+      "id": "chatterbox",
+      "name": "Chatterbox",
+      "family": "Resemble AI",
+      "category": "voice",
+      "params": "500M",
+      "paramsB": 0.5,
+      "context": 0,
+      "license": "mit",
+      "source": "https://huggingface.co/ResembleAI/chatterbox",
+      "summary": "Expressive open TTS with emotion control and zero-shot voice cloning.",
+      "why": "Lifelike, emotive speech that fits comfortably and is easy to run locally.",
+      "fit": "full",
+      "recommended": { "quant": "fp16", "vram": 2.5, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp16", "vram": 2.5, "note": "Recommended." }
+      ],
+      "runtimes": {
+        "other": "chatterbox-tts Python package",
+        "comfyui": "ComfyUI Chatterbox nodes"
+      },
+      "tokps": "n/a",
+      "released": 2025,
+      "tags": ["tts", "emotion", "voice-cloning"]
+    },
+
+    {
+      "id": "bge-m3",
+      "name": "BGE-M3",
+      "family": "BAAI",
+      "category": "embeddings-rag",
+      "params": "568M",
+      "paramsB": 0.568,
+      "context": 8192,
+      "license": "mit",
+      "source": "https://huggingface.co/BAAI/bge-m3",
+      "summary": "Multilingual, multi-granularity embedder supporting dense, sparse, and ColBERT retrieval.",
+      "why": "One model for dense + lexical + late-interaction retrieval. The RAG default.",
+      "fit": "full",
+      "recommended": { "quant": "fp16", "vram": 2.0, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp16", "vram": 2.0, "note": "Recommended." },
+        { "quant": "fp32", "vram": 3.0, "note": "CPU-friendly too." }
+      ],
+      "runtimes": {
+        "ollama": "ollama pull bge-m3",
+        "other": "FlagEmbedding / sentence-transformers / LangChain"
+      },
+      "tokps": "n/a",
+      "released": 2024,
+      "tags": ["embeddings", "multilingual", "hybrid", "colbert"]
+    },
+    {
+      "id": "qwen3-embedding-4b",
+      "name": "Qwen3-Embedding-4B",
+      "family": "Qwen",
+      "category": "embeddings-rag",
+      "params": "4B",
+      "paramsB": 4,
+      "context": 32768,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/Qwen/Qwen3-Embedding-4B",
+      "summary": "High-ranking text embedder with instruction-following and 100+ languages.",
+      "why": "Top retrieval accuracy for hard corpora, with a long 32K context.",
+      "fit": "full",
+      "recommended": { "quant": "fp16", "vram": 8.0, "kv8k": 1.5 },
+      "kvPerTokenMB": 0.156,
+      "quants": [
+        { "quant": "fp16", "vram": 8.0, "note": "Recommended." },
+        { "quant": "Q8_0", "vram": 4.3, "note": "Frees VRAM for the LLM." }
+      ],
+      "runtimes": {
+        "ollama": "ollama pull qwen3-embedding:4b",
+        "other": "sentence-transformers / vLLM"
+      },
+      "tokps": "n/a",
+      "released": 2025,
+      "tags": ["embeddings", "multilingual", "long-context"]
+    },
+    {
+      "id": "nomic-embed-text-v1.5",
+      "name": "nomic-embed-text v1.5",
+      "family": "Nomic",
+      "category": "embeddings-rag",
+      "params": "137M",
+      "paramsB": 0.137,
+      "context": 8192,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/nomic-ai/nomic-embed-text-v1.5",
+      "summary": "Compact 8192-context embedder with Matryoshka dimensions.",
+      "why": "Tiny, fast, and good enough for most RAG. Ideal when VRAM is at a premium.",
+      "fit": "full",
+      "recommended": { "quant": "fp16", "vram": 0.5, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp16", "vram": 0.5, "note": "Negligible." }
+      ],
+      "runtimes": {
+        "ollama": "ollama pull nomic-embed-text",
+        "other": "sentence-transformers / LangChain / LlamaIndex"
+      },
+      "tokps": "n/a",
+      "released": 2024,
+      "tags": ["embeddings", "lightweight", "matryoshka"]
+    },
+    {
+      "id": "bge-reranker-v2-m3",
+      "name": "BGE Reranker v2-m3",
+      "family": "BAAI",
+      "category": "embeddings-rag",
+      "params": "568M",
+      "paramsB": 0.568,
+      "context": 8192,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/BAAI/bge-reranker-v2-m3",
+      "summary": "Multilingual cross-encoder reranker that sharply improves RAG precision.",
+      "why": "Cheap to run and one of the biggest quality wins you can add to a local RAG stack.",
+      "fit": "full",
+      "recommended": { "quant": "fp16", "vram": 2.0, "kv8k": 0 },
+      "kvPerTokenMB": null,
+      "quants": [
+        { "quant": "fp16", "vram": 2.0, "note": "Recommended." }
+      ],
+      "runtimes": {
+        "other": "FlagEmbedding / sentence-transformers CrossEncoder"
+      },
+      "tokps": "n/a",
+      "released": 2024,
+      "tags": ["reranker", "multilingual", "rag"]
+    },
+    {
+      "id": "qwen3-reranker-4b",
+      "name": "Qwen3-Reranker-4B",
+      "family": "Qwen",
+      "category": "embeddings-rag",
+      "params": "4B",
+      "paramsB": 4,
+      "context": 32768,
+      "license": "apache-2.0",
+      "source": "https://huggingface.co/Qwen/Qwen3-Reranker-4B",
+      "summary": "Instruction-aware reranker with strong multilingual and long-context precision.",
+      "why": "Frontier reranking quality locally, and it shares the Qwen3 stack with your embedder.",
+      "fit": "full",
+      "recommended": { "quant": "Q8_0", "vram": 4.3, "kv8k": 1.5 },
+      "kvPerTokenMB": 0.156,
+      "quants": [
+        { "quant": "fp16", "vram": 8.0, "note": "Best quality." },
+        { "quant": "Q8_0", "vram": 4.3, "note": "Recommended. Frees VRAM." }
+      ],
+      "runtimes": {
+        "other": "sentence-transformers / vLLM / FlagEmbedding"
+      },
+      "tokps": "n/a",
+      "released": 2025,
+      "tags": ["reranker", "multilingual", "long-context"]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+name: New model
+description: Suggest a model for the 16 GB VRAM list
+title: '[Model] '
+labels: ['model']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing. Please check the model actually runs on ~16 GB
+        VRAM (or clearly needs offload) and cite a source for VRAM numbers.
+  - type: input
+    id: name
+    attributes:
+      label: Model name
+      placeholder: e.g. Qwen3-14B
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Chat & General
+        - Coding
+        - Vision & Multimodal
+        - Image & Video Generation
+        - Voice (STT / TTS)
+        - RAG & Embeddings
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source (Hugging Face / project URL)
+      placeholder: https://huggingface.co/...
+    validations:
+      required: true
+  - type: input
+    id: quant
+    attributes:
+      label: Recommended quant and weights VRAM
+      placeholder: 'Q4_K_M, ~8.5 GB'
+    validations:
+      required: true
+  - type: dropdown
+    id: fit
+    attributes:
+      label: Fit on 16 GB
+      options:
+        - Fits fully
+        - Tight
+        - Needs offload
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it belongs on this list
+      placeholder: What does it do better than the existing entries?
+    validations:
+      required: true
+  - type: textarea
+    id: commands
+    attributes:
+      label: Runtime commands
+      description: Copy-ready commands for Ollama / LM Studio / llama.cpp / vLLM / ComfyUI
+      render: shell
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I included the required fields in data/models.json (or will do so in a PR)
+          required: true
+        - label: VRAM numbers are estimates and labeled as such
+          required: true

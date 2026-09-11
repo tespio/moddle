@@ -1,0 +1,31 @@
+# Node / Astro
+node_modules/
+web/node_modules/
+web/dist/
+web/.astro/
+web/src/data/models.json
+web/src/content/docs/
+.npm/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Local env
+.env
+.env.*
+!.env.example
+
+# Models / weights (never commit)
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.onnx

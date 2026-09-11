@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or idea
+    url: https://github.com/tespio/moddle/discussions
+    about: Ask questions and discuss ideas with the community.
+  - name: Contributing guide
+    url: https://github.com/tespio/moddle/blob/main/CONTRIBUTING.md
+    about: How to add models and how the generated docs work.

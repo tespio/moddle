@@ -1,0 +1,54 @@
+---
+import type { Model } from '../lib/models';
+import { withBase } from '../lib/site';
+import { categoryName } from '../lib/models';
+import Badge from './Badge.astro';
+
+interface Props {
+  model: Model;
+  compact?: boolean;
+}
+
+const { model, compact = false } = Astro.props;
+const runtimes = Object.keys(model.runtimes ?? {}).filter((r) => r !== 'other');
+const totalForBar = Math.max(model.recommended.vram, 1);
+const pct = Math.min(100, Math.round((totalForBar / 16) * 100));
+---
+
+<a
+  class="card"
+  href={withBase(`/models/${model.id}/`)}
+  data-card
+  data-name={model.name.toLowerCase()}
+  data-category={model.category}
+  data-fit={model.fit}
+  data-runtime={Object.keys(model.runtimes ?? {}).join(',')}
+  data-vram={model.recommended.vram}
+  data-params={model.paramsB}
+  data-tokps={model.tokps === 'n/a' ? '' : model.tokps}
+>
+  <div class="card-top">
+    <div>
+      <div class="family">{model.family}</div>
+      <h3>{model.name}</h3>
+    </div>
+    <Badge fit={model.fit} />
+  </div>
+
+  {!compact && <p>{model.summary}</p>}
+
+  <div class="card-meta">
+    <span class="chip chip-strong">{model.params}</span>
+    <span class="chip">{model.recommended.quant}</span>
+    <span class="chip">{model.recommended.vram} GB</span>
+    {model.tokps && model.tokps !== 'n/a' && <span class="chip">{model.tokps} tok/s</span>}
+  </div>
+
+  <div>
+    <div class="vram-bar" aria-hidden="true"><i style={`width:${pct}%`}></i></div>
+    <div class="muted" style="font-size:.74rem;margin-top:6px">
+      {model.recommended.vram} GB weights · {categoryName(model.category)}
+      {runtimes.length > 0 && ` · ${runtimes.map((r) => r).join(', ')}`}
+    </div>
+  </div>
+</a>

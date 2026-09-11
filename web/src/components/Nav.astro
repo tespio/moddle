@@ -1,0 +1,52 @@
+---
+import { withBase, REPO } from '../lib/site';
+import { BASE } from '../lib/site';
+
+const path = Astro.url.pathname.replace(BASE, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href.replace(/\/$/, ''));
+
+const links = [
+  { href: '/models/', label: 'Models' },
+  { href: '/#categories', label: 'Categories' },
+  { href: '/docs/', label: 'Guides' },
+  { href: '/#calculator', label: 'Calculator' },
+];
+---
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href={withBase('/')} aria-label="moddle home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      moddle
+      <small>16 GB</small>
+    </a>
+
+    <nav class="nav-links" id="navlinks" aria-label="Main">
+      {
+        links.map((l) => (
+          <a
+            href={withBase(l.href)}
+            aria-current={isActive(l.href) ? 'page' : undefined}
+          >
+            {l.label}
+          </a>
+        ))
+      }
+      <a class="gh" href={REPO} target="_blank" rel="noopener noreferrer">GitHub</a>
+    </nav>
+
+    <button class="nav-toggle" id="navtoggle" aria-expanded="false" aria-controls="navlinks">
+      Menu
+    </button>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('navtoggle');
+  const nav = document.getElementById('navlinks');
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+</script>

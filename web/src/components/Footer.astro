@@ -1,0 +1,23 @@
+---
+import { withBase, REPO } from '../lib/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <strong>moddle</strong> — local AI for 16 GB VRAM.
+      <div class="muted">Code MIT · Content CC BY 4.0</div>
+    </div>
+    <div class="footer-links">
+      <a href={withBase('/models/')}>All models</a>
+      <a href={withBase('/docs/')}>Guides</a>
+      <a href={withBase('/#calculator')}>VRAM calculator</a>
+      <a href={REPO} target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </div>
+  <div class="container muted" style="margin-top:18px">
+    © {year} moddle contributors · VRAM and speed figures are estimates for this
+    hardware class.
+  </div>
+</footer>

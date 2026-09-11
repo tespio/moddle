@@ -1,0 +1,46 @@
+---
+import type { Model } from '../lib/models';
+import { withBase } from '../lib/site';
+import { categoryName } from '../lib/models';
+import Badge from './Badge.astro';
+
+interface Props {
+  models: Model[];
+  showCategory?: boolean;
+}
+
+const { models, showCategory = false } = Astro.props;
+---
+
+<div class="table-wrap">
+  <table class="data">
+    <thead>
+      <tr>
+        <th>Model</th>
+        {showCategory && <th>Category</th>}
+        <th>Params</th>
+        <th>Rec. quant</th>
+        <th>Weights</th>
+        <th>KV @ 8K</th>
+        <th>Fit</th>
+        <th>tok/s (est.)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        models.map((m) => (
+          <tr>
+            <td><a href={withBase(`/models/${m.id}/`)}>{m.name}</a></td>
+            {showCategory && <td>{categoryName(m.category)}</td>}
+            <td>{m.params}</td>
+            <td>{m.recommended.quant}</td>
+            <td>{m.recommended.vram} GB</td>
+            <td>{m.recommended.kv8k && m.recommended.kv8k > 0 ? `${m.recommended.kv8k} GB` : '—'}</td>
+            <td><Badge fit={m.fit} /></td>
+            <td>{m.tokps && m.tokps !== 'n/a' ? m.tokps : '—'}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
