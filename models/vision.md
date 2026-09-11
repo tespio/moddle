@@ -6,6 +6,7 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 
 | Model | Params | Rec. quant | Weights | KV @ 8K | Fit | tok/s (est.) |
 | --- | --- | --- | --- | --- | --- | --- |
+| [Qwen3-VL-8B](../models/vision.md) | 8B | Q8_0 | 9.5 GB | 1 GB | Full | 45-70 |
 | [Qwen2.5-VL-7B](../models/vision.md) | 7B | Q8_0 | 8.7 GB | 0.9 GB | Full | 45-70 |
 | [Qwen2.5-VL-32B](../models/vision.md) | 32B | Q4_K_M | 19 GB | 4 GB | Offload | 12-22 |
 | [Llama 3.2 11B Vision](../models/vision.md) | 11B | Q6_K | 9.5 GB | 1.3 GB | Full | 35-55 |
@@ -13,6 +14,55 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 | [Gemma 3 27B](../models/vision.md) | 27B | Q4_K_M | 16 GB | 3.9 GB | Tight | 18-30 |
 
 ## Models
+
+### Qwen3-VL-8B
+
+The current Qwen vision-language model, strong on documents, charts, grounding, and video.
+
+**Why it's here:** Runs fully at Q8 with a 256K context. The new default vision model for a 16 GB card.
+
+- **Params:** 8B
+- **Context:** 262,144 tokens
+- **License:** apache-2.0
+- **Fit on 16 GB:** Full
+- **Source:** <https://ollama.com/library/qwen3-vl>
+- **Speed (est.):** 45-70 tok/s on a 16 GB card
+
+**Quants:**
+
+| Quant | Weights | Notes |
+| --- | --- | --- |
+| Q4_K_M | 6.1 GB | Light and fast. |
+| Q6_K | 7.8 GB | Balanced. |
+| Q8_0 | 9.5 GB | Recommended. |
+
+**Run it:**
+
+_ollama_
+
+```
+ollama run qwen3-vl:8b
+```
+
+_lmstudio_
+
+```
+Search "Qwen3-VL 8B GGUF"
+```
+
+_llamacpp_
+
+```
+llama-mtmd-cli -hf ggml-org/Qwen3-VL-8B-Instruct-GGUF:Q8_0 --image photo.jpg
+```
+
+_vllm_
+
+```
+vllm serve Qwen/Qwen3-VL-8B-Instruct --max-model-len 32768
+```
+
+---
 
 ### Qwen2.5-VL-7B
 
@@ -25,7 +75,7 @@ Compact vision-language model strong at documents, charts, and grounding.
 - **License:** apache-2.0
 - **Fit on 16 GB:** Full
 - **Source:** <https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct>
-- **Speed (est.):** 45-70 tok/s on a 4070 Ti Super
+- **Speed (est.):** 45-70 tok/s on a 16 GB card
 
 **Quants:**
 
@@ -74,7 +124,7 @@ Large vision-language model with top-tier document and chart reasoning.
 - **License:** apache-2.0
 - **Fit on 16 GB:** Offload
 - **Source:** <https://huggingface.co/Qwen/Qwen2.5-VL-32B-Instruct>
-- **Speed (est.):** 12-22 tok/s on a 4070 Ti Super
+- **Speed (est.):** 12-22 tok/s on a 16 GB card
 
 **Quants:**
 
@@ -122,7 +172,7 @@ Meta's 11B multimodal model for image reasoning and captioning.
 - **License:** llama3.2
 - **Fit on 16 GB:** Full
 - **Source:** <https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct>
-- **Speed (est.):** 35-55 tok/s on a 4070 Ti Super
+- **Speed (est.):** 35-55 tok/s on a 16 GB card
 
 **Quants:**
 
@@ -171,7 +221,7 @@ Compact vision model that excels at OCR and multi-image understanding.
 - **License:** apache-2.0
 - **Fit on 16 GB:** Full
 - **Source:** <https://huggingface.co/openbmb/MiniCPM-V-2_6>
-- **Speed (est.):** 45-70 tok/s on a 4070 Ti Super
+- **Speed (est.):** 45-70 tok/s on a 16 GB card
 
 **Quants:**
 
@@ -220,7 +270,7 @@ Google's 27B multimodal model with a 128K context and strong reasoning.
 - **License:** gemma
 - **Fit on 16 GB:** Tight
 - **Source:** <https://huggingface.co/google/gemma-3-27b-it>
-- **Speed (est.):** 18-30 tok/s on a 4070 Ti Super
+- **Speed (est.):** 18-30 tok/s on a 16 GB card
 
 **Quants:**
 

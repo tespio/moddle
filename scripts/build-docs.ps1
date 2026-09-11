@@ -95,7 +95,7 @@ function New-ModelDetails {
     [void]$sb.AppendLine("- **Fit on 16 GB:** $(Get-FitLabel $m.fit)")
     [void]$sb.AppendLine("- **Source:** <$($m.source)>")
     if ($m.tokps -and $m.tokps -ne 'n/a') {
-        [void]$sb.AppendLine("- **Speed (est.):** $($m.tokps) tok/s on a 4070 Ti Super")
+        [void]$sb.AppendLine("- **Speed (est.):** $($m.tokps) tok/s on a 16 GB card")
     }
     [void]$sb.AppendLine()
     [void]$sb.AppendLine('**Quants:**')
@@ -151,18 +151,18 @@ foreach ($cat in $data.categories) {
 
 # --- README -----------------------------------------------------------------
 $topPickIds = @(
+    'qwen3.8-27b',
+    'qwen3.5-9b',
     'qwen3-14b',
-    'mistral-small-3.1-24b',
+    'gemma-4-12b',
     'gpt-oss-20b',
     'qwen3-30b-a3b',
-    'qwen2.5-coder-14b',
+    'glm-4.7-flash',
     'qwen3-coder-30b-a3b',
-    'qwen2.5-vl-7b',
-    'minicpm-v-2.6',
+    'devstral-small-2-24b',
+    'qwen3-vl-8b',
     'flux-1-schnell',
-    'sdxl',
     'whisper-large-v3-turbo',
-    'kokoro-82m',
     'bge-m3'
 )
 $topPicks = @($data.models | Where-Object { $topPickIds -contains $_.id })
@@ -172,7 +172,7 @@ $r = New-Object System.Text.StringBuilder
 [void]$r.AppendLine()
 [void]$r.AppendLine("**$($data.meta.tagline)**")
 [void]$r.AppendLine()
-[void]$r.AppendLine("A curated guide to the best local AI models that actually fit an **RTX 4070 Ti Super 16 GB**, 32 GB DDR5, and NVMe storage - with honest VRAM math, quants, and copy-ready commands.")
+[void]$r.AppendLine("A curated guide to the best local AI models that actually fit **16 GB of VRAM** (RTX 4060 Ti / 4070 Ti Super / 4080 / 5070 Ti / 5080, Arc A770, RX 7800 XT, and friends), with 32 GB of RAM and an NVMe SSD - honest VRAM math, quants, and copy-ready commands.")
 [void]$r.AppendLine()
 [void]$r.AppendLine('[![License: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE) [![Content: CC BY 4.0](https://img.shields.io/badge/content-CC--BY--4.0-lightgrey.svg)](LICENSE-CONTENT)')
 [void]$r.AppendLine()
@@ -180,15 +180,19 @@ $r = New-Object System.Text.StringBuilder
 [void]$r.AppendLine()
 [void]$r.AppendLine('## Target hardware')
 [void]$r.AppendLine()
-[void]$r.AppendLine('| Component | Spec |')
-[void]$r.AppendLine('| --- | --- |')
-[void]$r.AppendLine("| GPU | $($data.hardware.gpu) |")
-[void]$r.AppendLine("| VRAM | $($data.hardware.vramGB) GB (~$($data.hardware.usableVramGB) GB usable) |")
-[void]$r.AppendLine("| Bandwidth | $($data.hardware.bandwidthGBs) GB/s |")
-[void]$r.AppendLine("| System RAM | $($data.hardware.ramGB) GB $($data.hardware.ramType) |")
-[void]$r.AppendLine("| Storage | $($data.hardware.storage) |")
+[void]$r.AppendLine("Anything with **$($data.hardware.vramGB) GB of VRAM**, ideally ~$($data.hardware.ramGB) GB of RAM and an SSD. Cards this covers:")
 [void]$r.AppendLine()
-[void]$r.AppendLine('## If you only try ten things')
+[void]$r.AppendLine('| Card | Vendor | Bandwidth |')
+[void]$r.AppendLine('| --- | --- | --- |')
+foreach ($card in $data.hardware.cards) {
+    [void]$r.AppendLine("| $($card.name) | $($card.vendor) | $($card.bandwidth) GB/s |")
+}
+[void]$r.AppendLine()
+[void]$r.AppendLine("- Budget about $(Format-GB $data.hardware.usableVramGB) GB usable after OS and display overhead.")
+[void]$r.AppendLine("- Bandwidth sets tokens per second. Reference: $($data.hardware.bandwidthGBs) GB/s; faster cards scale up, slower cards down.")
+[void]$r.AppendLine("- Assumes $($data.hardware.ramGB) GB $($data.hardware.ramType) and $($data.hardware.storage) for offload and fast loads.")
+[void]$r.AppendLine()
+[void]$r.AppendLine('## Start here')
 [void]$r.AppendLine()
 [void]$r.AppendLine((New-ModelTable -Models $topPicks -LinkMode 'site').TrimEnd())
 [void]$r.AppendLine()

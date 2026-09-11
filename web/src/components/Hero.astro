@@ -6,7 +6,7 @@ const stats = [
   { v: String(models.length), k: 'curated models' },
   { v: `${hardware.vramGB} GB`, k: 'target VRAM' },
   { v: `${hardware.usableVramGB} GB`, k: 'usable after overhead' },
-  { v: `${hardware.bandwidthGBs} GB/s`, k: 'memory bandwidth' },
+  { v: `${hardware.bandwidthGBs} GB/s`, k: 'reference bandwidth' },
   { v: String(categories.length), k: 'workloads covered' },
 ];
 ---
@@ -16,8 +16,8 @@ const stats = [
     <span class="eyebrow">● local AI · {meta.target}</span>
     <h1>Because your GPU has <span class="gradient-text">16 GB</span>, not infinite.</h1>
     <p class="lede">
-      A curated list of the best local models that actually fit an RTX 4070 Ti
-      Super — with honest VRAM math, the right quantization, and copy-ready
+      A curated list of the best local models that actually fit a 16 GB VRAM
+      card — with honest VRAM math, the right quantization, and copy-ready
       commands for every runtime.
     </p>
 
@@ -27,8 +27,9 @@ const stats = [
     </div>
 
     <div class="spec-strip">
-      <span class="spec-pill"><span class="dot"></span><strong>{hardware.gpu}</strong></span>
-      <span class="spec-pill"><strong>{hardware.ramGB} GB</strong> {hardware.ramType}</span>
+      <span class="spec-pill"><span class="dot"></span><strong>{hardware.vramGB} GB VRAM</strong> class</span>
+      <span class="spec-pill">RTX 4060 Ti → 5080 · Arc · Radeon</span>
+      <span class="spec-pill"><strong>{hardware.ramGB} GB</strong> RAM</span>
       <span class="spec-pill"><strong>{hardware.storage}</strong></span>
       <span class="spec-pill">Ollama · LM Studio · llama.cpp · vLLM · ComfyUI</span>
     </div>

@@ -2,19 +2,31 @@
   "meta": {
     "name": "moddle",
     "tagline": "Because your GPU has 16 GB, not infinite.",
-    "target": "NVIDIA RTX 4070 Ti Super 16 GB",
-    "version": "0.1.0",
+    "target": "16 GB VRAM class GPUs",
+    "version": "0.2.0",
     "license": { "code": "MIT", "content": "CC-BY-4.0" },
     "note": "VRAM figures are estimates for weights only unless a context is given. KV cache scales with context length. Measured throughput varies by runtime, driver, and settings."
   },
   "hardware": {
-    "gpu": "RTX 4070 Ti Super",
+    "gpu": "16 GB VRAM class GPU",
     "vramGB": 16,
-    "usableVramGB": 14.75,
+    "usableVramGB": 14.5,
     "bandwidthGBs": 672,
+    "bandwidthNote": "Reference card. Memory bandwidth sets tokens/sec: faster 16 GB cards are proportionally faster, slower ones proportionally slower.",
     "ramGB": 32,
     "ramType": "DDR5",
-    "storage": "NVMe SSD"
+    "storage": "NVMe SSD",
+    "cards": [
+      { "name": "RTX 4060 Ti 16 GB", "vendor": "NVIDIA", "bandwidth": 288 },
+      { "name": "RTX 5060 Ti 16 GB", "vendor": "NVIDIA", "bandwidth": 448 },
+      { "name": "RTX 4070 Ti Super", "vendor": "NVIDIA", "bandwidth": 672 },
+      { "name": "RTX 4080 / 4080 Super", "vendor": "NVIDIA", "bandwidth": 717 },
+      { "name": "RTX 5070 Ti", "vendor": "NVIDIA", "bandwidth": 896 },
+      { "name": "RTX 5080", "vendor": "NVIDIA", "bandwidth": 960 },
+      { "name": "Arc A770 16 GB", "vendor": "Intel", "bandwidth": 560 },
+      { "name": "Radeon RX 7800 XT 16 GB", "vendor": "AMD", "bandwidth": 624 },
+      { "name": "Radeon RX 9070 XT 16 GB", "vendor": "AMD", "bandwidth": 645 }
+    ]
   },
   "categories": [
     {
@@ -55,6 +67,397 @@
     }
   ],
   "models": [
+    {
+      "id": "qwen3.8-27b",
+      "name": "Qwen3.8-27B",
+      "family": "Qwen",
+      "category": "chat",
+      "params": "27B",
+      "paramsB": 27,
+      "activeParamsB": 27,
+      "context": 262144,
+      "license": "apache-2.0",
+      "source": "https://ollama.com/library/qwen3.8",
+      "summary": "Qwen's current 27B flagship for coding, professional work, research, and long-horizon agentic tasks, with vision and thinking.",
+      "why": "The strongest generalist you can self-host in this class. Needs partial offload at Q4, but the jump in capability is worth it.",
+      "fit": "offload",
+      "recommended": { "quant": "Q4_K_M", "vram": 16.5, "kv8k": 2.5 },
+      "kvPerTokenMB": 0.3,
+      "quants": [
+        { "quant": "Q3_K_M", "vram": 13.0, "note": "Near-resident; small quality cost." },
+        { "quant": "Q4_K_M", "vram": 16.5, "note": "Recommended; moderate offload." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen3.8:27b",
+        "lmstudio": "Search \"Qwen3.8 27B GGUF\"",
+        "llamacpp": "llama-cli -hf unsloth/Qwen3.8-27B-GGUF:Q4_K_M -c 32768 -ngl 40",
+        "vllm": "vllm serve Qwen/Qwen3.8-27B --max-model-len 32768"
+      },
+      "tokps": "15-28",
+      "released": 2026,
+      "tags": ["vision", "thinking", "agentic", "offload"]
+    },
+    {
+      "id": "qwen3.5-9b",
+      "name": "Qwen3.5-9B",
+      "family": "Qwen",
+      "category": "chat",
+      "params": "9B",
+      "paramsB": 9,
+      "activeParamsB": 9,
+      "context": 262144,
+      "license": "apache-2.0",
+      "source": "https://ollama.com/library/qwen3.5",
+      "summary": "Multimodal 9B from the Qwen3.5 family, balancing quality and speed with a 256K context.",
+      "why": "The new default 9B: fits fully at Q6 with a long context and handles text, images, tools, and thinking.",
+      "fit": "full",
+      "recommended": { "quant": "Q6_K", "vram": 7.4, "kv8k": 1.0 },
+      "kvPerTokenMB": 0.12,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 5.2, "note": "Very light and fast." },
+        { "quant": "Q6_K", "vram": 7.4, "note": "Recommended." },
+        { "quant": "Q8_0", "vram": 9.7, "note": "Max quality, still resident." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen3.5:9b",
+        "lmstudio": "Search \"Qwen3.5 9B GGUF\"",
+        "llamacpp": "llama-cli -hf unsloth/Qwen3.5-9B-GGUF:Q6_K -c 32768 -ngl 99",
+        "vllm": "vllm serve Qwen/Qwen3.5-9B --max-model-len 32768"
+      },
+      "tokps": "55-85",
+      "released": 2026,
+      "tags": ["vision", "thinking", "tools", "long-context"]
+    },
+    {
+      "id": "qwen3.5-27b",
+      "name": "Qwen3.5-27B",
+      "family": "Qwen",
+      "category": "chat",
+      "params": "27B",
+      "paramsB": 27,
+      "activeParamsB": 27,
+      "context": 262144,
+      "license": "apache-2.0",
+      "source": "https://ollama.com/library/qwen3.5",
+      "summary": "The larger Qwen3.5 multimodal model for when 9B is not enough.",
+      "why": "A clear quality step up. Q3 keeps it resident; Q4 needs light offload.",
+      "fit": "tight",
+      "recommended": { "quant": "Q3_K_M", "vram": 13.0, "kv8k": 2.5 },
+      "kvPerTokenMB": 0.3,
+      "quants": [
+        { "quant": "Q3_K_M", "vram": 13.0, "note": "Recommended; fully resident." },
+        { "quant": "Q4_K_M", "vram": 16.0, "note": "Higher quality; light offload." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen3.5:27b",
+        "lmstudio": "Search \"Qwen3.5 27B GGUF\"",
+        "llamacpp": "llama-cli -hf unsloth/Qwen3.5-27B-GGUF:Q3_K_M -c 16384 -ngl 99",
+        "vllm": "vllm serve Qwen/Qwen3.5-27B --max-model-len 32768"
+      },
+      "tokps": "18-30",
+      "released": 2026,
+      "tags": ["vision", "thinking", "long-context", "tight"]
+    },
+    {
+      "id": "qwen3.6-27b",
+      "name": "Qwen3.6-27B",
+      "family": "Qwen",
+      "category": "chat",
+      "params": "27B",
+      "paramsB": 27,
+      "activeParamsB": 27,
+      "context": 262144,
+      "license": "apache-2.0",
+      "source": "https://ollama.com/library/qwen3.6",
+      "summary": "Qwen3.6 upgrades agentic coding and thinking preservation over earlier Qwen generations.",
+      "why": "A strong agentic/coding generalist at 27B when you can spare the VRAM for offload.",
+      "fit": "offload",
+      "recommended": { "quant": "Q4_K_M", "vram": 16.0, "kv8k": 2.5 },
+      "kvPerTokenMB": 0.3,
+      "quants": [
+        { "quant": "Q3_K_M", "vram": 13.0, "note": "Fully resident option." },
+        { "quant": "Q4_K_M", "vram": 16.0, "note": "Recommended; light offload." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen3.6:27b",
+        "lmstudio": "Search \"Qwen3.6 27B GGUF\"",
+        "llamacpp": "llama-cli -hf unsloth/Qwen3.6-27B-GGUF:Q4_K_M -c 32768 -ngl 40",
+        "vllm": "vllm serve Qwen/Qwen3.6-27B --max-model-len 32768"
+      },
+      "tokps": "16-28",
+      "released": 2026,
+      "tags": ["agentic", "thinking", "vision", "offload"]
+    },
+    {
+      "id": "qwen3-8b",
+      "name": "Qwen3-8B",
+      "family": "Qwen",
+      "category": "chat",
+      "params": "8B",
+      "paramsB": 8,
+      "activeParamsB": 8,
+      "context": 40960,
+      "license": "apache-2.0",
+      "source": "https://ollama.com/library/qwen3",
+      "summary": "The dense 8B member of the Qwen3 family with switchable thinking mode.",
+      "why": "Runs fully at Q8 with room to spare. A great fast daily driver or second model alongside a bigger one.",
+      "fit": "full",
+      "recommended": { "quant": "Q8_0", "vram": 8.7, "kv8k": 0.8 },
+      "kvPerTokenMB": 0.1,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 5.2, "note": "Ultra light." },
+        { "quant": "Q6_K", "vram": 6.6, "note": "Balanced." },
+        { "quant": "Q8_0", "vram": 8.7, "note": "Recommended." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen3:8b",
+        "lmstudio": "Search \"Qwen3 8B GGUF\"",
+        "llamacpp": "llama-cli -hf bartowski/Qwen_Qwen3-8B-GGUF:Q8_0 -c 32768 -ngl 99",
+        "vllm": "vllm serve Qwen/Qwen3-8B --max-model-len 32768"
+      },
+      "tokps": "60-95",
+      "released": 2025,
+      "tags": ["thinking", "tools", "lightweight"]
+    },
+    {
+      "id": "gemma-4-12b",
+      "name": "Gemma 4 12B",
+      "family": "Gemma",
+      "category": "chat",
+      "params": "12B",
+      "paramsB": 12,
+      "activeParamsB": 12,
+      "context": 262144,
+      "license": "gemma",
+      "source": "https://ollama.com/library/gemma4",
+      "summary": "Gemma 4 blends strong reasoning, agentic workflows, coding, and multimodal understanding at 12B.",
+      "why": "Fits fully at Q6 with a 256K context. The best all-round Gemma for this card.",
+      "fit": "full",
+      "recommended": { "quant": "Q6_K", "vram": 10.0, "kv8k": 2.8 },
+      "kvPerTokenMB": 0.35,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 7.6, "note": "Light; lots of context room." },
+        { "quant": "Q6_K", "vram": 10.0, "note": "Recommended." },
+        { "quant": "Q8_0", "vram": 13.0, "note": "Heavy KV; keep context modest." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run gemma4:12b",
+        "lmstudio": "Search \"Gemma 4 12B GGUF\"",
+        "llamacpp": "llama-cli -hf unsloth/gemma-4-12B-it-qat-GGUF:Q6_K -c 32768 -ngl 99",
+        "vllm": "vllm serve google/gemma-4-12b-it --max-model-len 32768"
+      },
+      "tokps": "40-60",
+      "released": 2026,
+      "tags": ["vision", "thinking", "agentic", "long-context"]
+    },
+    {
+      "id": "gemma-4-26b",
+      "name": "Gemma 4 26B (MoE)",
+      "family": "Gemma",
+      "category": "chat",
+      "params": "25B (3.8B active)",
+      "paramsB": 25.2,
+      "activeParamsB": 3.8,
+      "context": 262144,
+      "license": "gemma",
+      "source": "https://ollama.com/library/gemma4",
+      "summary": "Gemma 4's MoE flagship: 25B total with only 3.8B active per token.",
+      "why": "Near-frontier Gemma quality at small-model speed. Light offload is barely noticeable for a MoE.",
+      "fit": "offload",
+      "recommended": { "quant": "Q4_K_M", "vram": 19.0, "kv8k": 2.5 },
+      "kvPerTokenMB": 0.3,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 19.0, "note": "Recommended; MoE-friendly offload." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run gemma4:26b",
+        "lmstudio": "Search \"Gemma 4 26B GGUF\"",
+        "llamacpp": "llama-cli -hf unsloth/gemma-4-26B-it-GGUF:Q4_K_M -c 32768 -ngl 40 --n-cpu-moe 16",
+        "vllm": "vllm serve google/gemma-4-26b-it --max-model-len 32768"
+      },
+      "tokps": "45-75",
+      "released": 2026,
+      "tags": ["moe", "vision", "thinking", "fast", "offload"]
+    },
+    {
+      "id": "glm-4.7-flash",
+      "name": "GLM-4.7-Flash",
+      "family": "GLM",
+      "category": "chat",
+      "params": "30B (3B active)",
+      "paramsB": 30,
+      "activeParamsB": 3,
+      "context": 198000,
+      "license": "see model card",
+      "source": "https://ollama.com/library/glm-4.7-flash",
+      "summary": "Zhipu's 30B-A3B MoE aimed at lightweight deployment and efficiency.",
+      "why": "The strongest model in the 30B class with tools and thinking, and MoE keeps offload cheap.",
+      "fit": "offload",
+      "recommended": { "quant": "Q4_K_M", "vram": 19.0, "kv8k": 1.5 },
+      "kvPerTokenMB": 0.18,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 19.0, "note": "Recommended; moderate offload." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run glm-4.7-flash",
+        "lmstudio": "Search \"GLM-4.7-Flash GGUF\"",
+        "llamacpp": "llama-cli -hf unsloth/GLM-4.7-Flash-GGUF:Q4_K_M -c 32768 -ngl 40 --n-cpu-moe 20",
+        "vllm": "vllm serve zai-org/GLM-4.7-Flash --max-model-len 32768"
+      },
+      "tokps": "55-90",
+      "released": 2026,
+      "tags": ["moe", "thinking", "tools", "offload"]
+    },
+    {
+      "id": "magistral-24b",
+      "name": "Magistral 24B",
+      "family": "Mistral",
+      "category": "chat",
+      "params": "24B",
+      "paramsB": 24,
+      "activeParamsB": 24,
+      "context": 40000,
+      "license": "apache-2.0",
+      "source": "https://ollama.com/library/magistral",
+      "summary": "Mistral's small, efficient reasoning model with transparent thinking.",
+      "why": "Dedicated reasoning at 24B that fits fully at Q4. Great for math and multi-step problems.",
+      "fit": "full",
+      "recommended": { "quant": "Q4_K_M", "vram": 14.0, "kv8k": 1.25 },
+      "kvPerTokenMB": 0.16,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 14.0, "note": "Recommended; fits with context." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run magistral:24b",
+        "lmstudio": "Search \"Magistral 24B GGUF\"",
+        "llamacpp": "llama-cli -hf unsloth/Magistral-Small-2509-GGUF:Q4_K_M -c 32768 -ngl 99",
+        "vllm": "vllm serve mistralai/Magistral-Small-2509 --max-model-len 32768"
+      },
+      "tokps": "28-42",
+      "released": 2025,
+      "tags": ["reasoning", "thinking", "math"]
+    },
+    {
+      "id": "lfm2-24b-a2b",
+      "name": "LFM2-24B-A2B",
+      "family": "Liquid AI",
+      "category": "chat",
+      "params": "24B (2B active)",
+      "paramsB": 24,
+      "activeParamsB": 2,
+      "context": 32768,
+      "license": "see model card",
+      "source": "https://ollama.com/library/lfm2",
+      "summary": "Liquid AI's hybrid MoE built for on-device deployment with only 2B active parameters.",
+      "why": "Fits fully and runs extremely fast. Ideal for always-on assistants on modest hardware.",
+      "fit": "full",
+      "recommended": { "quant": "Q4_K_M", "vram": 14.0, "kv8k": 1.25 },
+      "kvPerTokenMB": 0.16,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 14.0, "note": "Recommended." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run lfm2:24b",
+        "lmstudio": "Search \"LFM2 24B A2B GGUF\"",
+        "llamacpp": "llama-cli -hf LiquidAI/LFM2-24B-A2B-GGUF:Q4_K_M -c 32768 -ngl 99",
+        "vllm": "vllm serve LiquidAI/LFM2-24B-A2B --max-model-len 32768"
+      },
+      "tokps": "70-110",
+      "released": 2026,
+      "tags": ["moe", "hybrid", "fast", "on-device"]
+    },
+    {
+      "id": "ministral-3-14b",
+      "name": "Ministral 3 14B",
+      "family": "Mistral",
+      "category": "chat",
+      "params": "14B",
+      "paramsB": 14,
+      "activeParamsB": 14,
+      "context": 262144,
+      "license": "apache-2.0",
+      "source": "https://ollama.com/library/ministral-3",
+      "summary": "Mistral's edge-focused Ministral 3 family, with a 256K context and vision at 14B.",
+      "why": "Fits fully at Q6 with a 256K context and tool use. A compact, capable multilingual workhorse.",
+      "fit": "full",
+      "recommended": { "quant": "Q6_K", "vram": 11.5, "kv8k": 1.4 },
+      "kvPerTokenMB": 0.16,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 9.1, "note": "Light; long context room." },
+        { "quant": "Q6_K", "vram": 11.5, "note": "Recommended." },
+        { "quant": "Q8_0", "vram": 15.0, "note": "Tight; short contexts." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run ministral-3:14b",
+        "lmstudio": "Search \"Ministral 3 14B GGUF\"",
+        "llamacpp": "llama-cli -hf mistralai/Ministral-3-14B-Instruct-GGUF:Q6_K -c 32768 -ngl 99",
+        "vllm": "vllm serve mistralai/Ministral-3-14B-Instruct --max-model-len 32768"
+      },
+      "tokps": "35-55",
+      "released": 2026,
+      "tags": ["vision", "tools", "multilingual", "long-context"]
+    },
+    {
+      "id": "devstral-small-2-24b",
+      "name": "Devstral Small 2 24B",
+      "family": "Mistral",
+      "category": "coding",
+      "params": "24B",
+      "paramsB": 24,
+      "activeParamsB": 24,
+      "context": 393216,
+      "license": "apache-2.0",
+      "source": "https://ollama.com/library/devstral-small-2",
+      "summary": "A coding-agent model built to explore codebases, edit multiple files, and use tools.",
+      "why": "The best local software-engineering agent in this class. Tight at Q4, but worth it for agentic coding.",
+      "fit": "tight",
+      "recommended": { "quant": "Q4_K_M", "vram": 15.0, "kv8k": 1.25 },
+      "kvPerTokenMB": 0.16,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 15.0, "note": "Recommended; keep context modest." },
+        { "quant": "Q4_K_S", "vram": 14.0, "note": "A little more headroom." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run devstral-small-2:24b",
+        "lmstudio": "Search \"Devstral Small 2 24B GGUF\"",
+        "llamacpp": "llama-cli -hf mistralai/Devstral-Small-2-24B-GGUF:Q4_K_M -c 32768 -ngl 99",
+        "vllm": "vllm serve mistralai/Devstral-Small-2-24B-Instruct --max-model-len 32768"
+      },
+      "tokps": "28-42",
+      "released": 2026,
+      "tags": ["coding", "agents", "tools", "vision", "tight"]
+    },
+    {
+      "id": "qwen3-vl-8b",
+      "name": "Qwen3-VL-8B",
+      "family": "Qwen",
+      "category": "vision",
+      "params": "8B",
+      "paramsB": 8,
+      "activeParamsB": 8,
+      "context": 262144,
+      "license": "apache-2.0",
+      "source": "https://ollama.com/library/qwen3-vl",
+      "summary": "The current Qwen vision-language model, strong on documents, charts, grounding, and video.",
+      "why": "Runs fully at Q8 with a 256K context. The new default vision model for a 16 GB card.",
+      "fit": "full",
+      "recommended": { "quant": "Q8_0", "vram": 9.5, "kv8k": 1.0 },
+      "kvPerTokenMB": 0.12,
+      "quants": [
+        { "quant": "Q4_K_M", "vram": 6.1, "note": "Light and fast." },
+        { "quant": "Q6_K", "vram": 7.8, "note": "Balanced." },
+        { "quant": "Q8_0", "vram": 9.5, "note": "Recommended." }
+      ],
+      "runtimes": {
+        "ollama": "ollama run qwen3-vl:8b",
+        "lmstudio": "Search \"Qwen3-VL 8B GGUF\"",
+        "llamacpp": "llama-mtmd-cli -hf ggml-org/Qwen3-VL-8B-Instruct-GGUF:Q8_0 --image photo.jpg",
+        "vllm": "vllm serve Qwen/Qwen3-VL-8B-Instruct --max-model-len 32768"
+      },
+      "tokps": "45-70",
+      "released": 2025,
+      "tags": ["vision", "ocr", "documents", "video", "long-context"]
+    },
     {
       "id": "qwen3-14b",
       "name": "Qwen3-14B",
@@ -201,7 +604,7 @@
         { "quant": "Q5_K_M", "vram": 21.0, "note": "More offload, higher quality." }
       ],
       "runtimes": {
-        "ollama": "ollama run qwen3:30b-a3b",
+        "ollama": "ollama run qwen3:30b",
         "lmstudio": "Search \"Qwen3 30B A3B GGUF\"",
         "llamacpp": "llama-cli -hf unsloth/Qwen3-30B-A3B-GGUF:Q4_K_M -c 32768 -ngl 40",
         "vllm": "vllm serve Qwen/Qwen3-30B-A3B --max-model-len 32768"

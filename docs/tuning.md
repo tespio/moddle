@@ -1,6 +1,6 @@
 # Tuning for 16 GB
 
-A practical checklist for getting the most out of an RTX 4070 Ti Super. Most
+A practical checklist for getting the most out of a 16 GB card. Most
 "it doesn't fit" problems are actually a context, KV-cache, or overhead problem
 — not a weights problem.
 

@@ -1,14 +1,22 @@
 # Hardware & VRAM
 
-This project targets one very specific, very popular configuration:
+This project targets the whole **16 GB VRAM class** of GPUs. If your card has
+16 GB, this guide is for you.
 
-| Component | Spec |
-| --- | --- |
-| GPU | NVIDIA RTX 4070 Ti Super |
-| VRAM | 16 GB GDDR6X |
-| Memory bandwidth | 672 GB/s |
-| System RAM | 32 GB DDR5 |
-| Storage | NVMe SSD |
+| Card | Vendor | Bandwidth |
+| --- | --- | --- |
+| RTX 4060 Ti 16 GB | NVIDIA | 288 GB/s |
+| RTX 5060 Ti 16 GB | NVIDIA | 448 GB/s |
+| RTX 4070 Ti Super | NVIDIA | 672 GB/s |
+| RTX 4080 / 4080 Super | NVIDIA | 717 GB/s |
+| RTX 5070 Ti | NVIDIA | 896 GB/s |
+| RTX 5080 | NVIDIA | 960 GB/s |
+| Arc A770 16 GB | Intel | 560 GB/s |
+| Radeon RX 7800 XT 16 GB | AMD | 624 GB/s |
+| Radeon RX 9070 XT 16 GB | AMD | 645 GB/s |
+
+The rest of this guide assumes **~32 GB of system RAM** and an **NVMe SSD**, for
+CPU offload and fast model loading.
 
 Bandwidth is the number that decides tokens per second. For a model that fits
 entirely in VRAM, throughput is roughly:
@@ -17,13 +25,16 @@ entirely in VRAM, throughput is roughly:
 tokens/sec ≈ memory bandwidth ÷ model size in VRAM
 ```
 
-A 10 GB model on this card is therefore in the tens of tokens per second.
-Once a model spills into system RAM, throughput collapses to DDR5 speeds.
+The RTX 4070 Ti Super (672 GB/s) is the reference card for the speed estimates
+in this repo. A 4060 Ti 16 GB generates roughly 40% of its speed; a 5080 a
+little more than it. A 10 GB model is in the tens of tokens per second on the
+reference card. Once a model spills into system RAM, throughput collapses to
+DDR5 speeds — which is far less painful for MoE models than for dense ones.
 
 ## The usable-VRAM budget
 
 You do not get all 16 GB. Reserve roughly **1.0–1.5 GB** for Windows, the
-desktop, and the runtime's own overhead. Plan on **~14.75 GB usable**.
+desktop, and the runtime's own overhead. Plan on **~14.5 GB usable**.
 
 Every VRAM number in this repo is one of:
 

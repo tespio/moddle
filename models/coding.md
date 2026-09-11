@@ -6,6 +6,7 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 
 | Model | Params | Rec. quant | Weights | KV @ 8K | Fit | tok/s (est.) |
 | --- | --- | --- | --- | --- | --- | --- |
+| [Devstral Small 2 24B](../models/coding.md) | 24B | Q4_K_M | 15 GB | 1.3 GB | Tight | 28-42 |
 | [Qwen2.5-Coder-14B](../models/coding.md) | 14B | Q5_K_M | 10.5 GB | 3 GB | Full | 35-55 |
 | [Qwen3-Coder-30B-A3B](../models/coding.md) | 30B (3B active) | Q4_K_M | 17.5 GB | 1.5 GB | Offload | 60-100 |
 | [DeepSeek-Coder-V2-Lite](../models/coding.md) | 16B (2.4B active) | Q5_K_M | 11.5 GB | 0.8 GB | Full | 55-85 |
@@ -13,6 +14,54 @@ _Part of [moddle](../README.md). Machines: see the [hardware guide](../docs/hard
 | [Qwen2.5-Coder-7B](../models/coding.md) | 7B | Q8_0 | 7.6 GB | 0.9 GB | Full | 60-90 |
 
 ## Models
+
+### Devstral Small 2 24B
+
+A coding-agent model built to explore codebases, edit multiple files, and use tools.
+
+**Why it's here:** The best local software-engineering agent in this class. Tight at Q4, but worth it for agentic coding.
+
+- **Params:** 24B
+- **Context:** 393,216 tokens
+- **License:** apache-2.0
+- **Fit on 16 GB:** Tight
+- **Source:** <https://ollama.com/library/devstral-small-2>
+- **Speed (est.):** 28-42 tok/s on a 16 GB card
+
+**Quants:**
+
+| Quant | Weights | Notes |
+| --- | --- | --- |
+| Q4_K_M | 15 GB | Recommended; keep context modest. |
+| Q4_K_S | 14 GB | A little more headroom. |
+
+**Run it:**
+
+_ollama_
+
+```
+ollama run devstral-small-2:24b
+```
+
+_lmstudio_
+
+```
+Search "Devstral Small 2 24B GGUF"
+```
+
+_llamacpp_
+
+```
+llama-cli -hf mistralai/Devstral-Small-2-24B-GGUF:Q4_K_M -c 32768 -ngl 99
+```
+
+_vllm_
+
+```
+vllm serve mistralai/Devstral-Small-2-24B-Instruct --max-model-len 32768
+```
+
+---
 
 ### Qwen2.5-Coder-14B
 
@@ -25,7 +74,7 @@ Dedicated coding model with strong fill-in-the-middle and repo-level ability.
 - **License:** apache-2.0
 - **Fit on 16 GB:** Full
 - **Source:** <https://huggingface.co/Qwen/Qwen2.5-Coder-14B-Instruct>
-- **Speed (est.):** 35-55 tok/s on a 4070 Ti Super
+- **Speed (est.):** 35-55 tok/s on a 16 GB card
 
 **Quants:**
 
@@ -74,7 +123,7 @@ MoE coding model with agentic tool use and a huge native context.
 - **License:** apache-2.0
 - **Fit on 16 GB:** Offload
 - **Source:** <https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct>
-- **Speed (est.):** 60-100 tok/s on a 4070 Ti Super
+- **Speed (est.):** 60-100 tok/s on a 16 GB card
 
 **Quants:**
 
@@ -123,7 +172,7 @@ MoE coding model that fits fully and supports 338 programming languages.
 - **License:** deepseek
 - **Fit on 16 GB:** Full
 - **Source:** <https://huggingface.co/deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct>
-- **Speed (est.):** 55-85 tok/s on a 4070 Ti Super
+- **Speed (est.):** 55-85 tok/s on a 16 GB card
 
 **Quants:**
 
@@ -172,7 +221,7 @@ Mistral's code specialist with strong completion and 80+ language coverage.
 - **License:** mnc-research
 - **Fit on 16 GB:** Full
 - **Source:** <https://huggingface.co/mistralai/Codestral-22B-v0.1>
-- **Speed (est.):** 28-42 tok/s on a 4070 Ti Super
+- **Speed (est.):** 28-42 tok/s on a 16 GB card
 
 **Quants:**
 
@@ -221,7 +270,7 @@ Lightweight coding model that leaves VRAM free for long contexts and other tools
 - **License:** apache-2.0
 - **Fit on 16 GB:** Full
 - **Source:** <https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct>
-- **Speed (est.):** 60-90 tok/s on a 4070 Ti Super
+- **Speed (est.):** 60-90 tok/s on a 16 GB card
 
 **Quants:**
 

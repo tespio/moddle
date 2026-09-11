@@ -71,13 +71,16 @@ try {
 # --- 3. Static assertions ---------------------------------------------------
 Section 'Checking built output'
 $pages = @{
-    'index.html'                     = 'Because your GPU has'
-    'models/index.html'              = 'All '
-    'models/qwen3-14b/index.html'    = 'Qwen3-14B'
-    'categories/chat/index.html'     = 'Chat'
-    'docs/index.html'                = 'Guides'
-    'docs/hardware/index.html'       = 'usable'
-    'docs/tuning/index.html'         = 'OOM'
+    'index.html'                       = 'Because your GPU has'
+    'models/index.html'                = 'All '
+    'models/qwen3-14b/index.html'      = 'Qwen3-14B'
+    'models/qwen3.8-27b/index.html'    = 'Qwen3.8-27B'
+    'models/gemma-4-12b/index.html'    = 'Gemma 4 12B'
+    'models/qwen3-vl-8b/index.html'    = 'Qwen3-VL-8B'
+    'categories/chat/index.html'       = 'Chat'
+    'docs/index.html'                  = 'Guides'
+    'docs/hardware/index.html'         = 'usable'
+    'docs/tuning/index.html'           = 'OOM'
 }
 foreach ($rel in $pages.Keys) {
     $file = Join-Path $dist $rel
@@ -124,6 +127,9 @@ if (-not $SkipPreview) {
                     '/',
                     '/models/',
                     '/models/qwen3-14b/',
+                    '/models/qwen3.8-27b/',
+                    '/models/gemma-4-12b/',
+                    '/models/qwen3-vl-8b/',
                     '/models/qwen3-coder-30b-a3b/',
                     '/categories/vision/',
                     '/docs/',
