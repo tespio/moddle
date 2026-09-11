@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Badge from '../../components/Badge.astro';
 import RuntimeTabs from '../../components/RuntimeTabs.astro';
 import ModelCard from '../../components/ModelCard.astro';
+import CreditBanner from '../../components/CreditBanner.astro';
 import { models, byCategory, categoryName } from '../../lib/models';
 import type { Model } from '../../lib/models';
 import { withBase } from '../../lib/site';
@@ -60,11 +61,26 @@ const tags = model.tags ?? [];
 
       <p class="lede muted" style="font-size:1.05rem;max-width:70ch">{model.summary}</p>
 
+      {model.kit && <CreditBanner />}
+
+      {
+        model.fit === 'offload' && (
+          <div class="card mt-2" style="border-color:rgba(251,113,133,.4)">
+            <div class="family">Needs offload</div>
+            <h3 style="font-size:1.05rem;margin:4px 0 6px">This model spills into system RAM</h3>
+            <p style="margin:0">
+              See the <a href={withBase('/docs/offloading/')}>offloading guide</a> for the exact
+              flags to keep it fast — especially MoE expert offload.
+            </p>
+          </div>
+        )
+      }
+
       <div class="grid" style="grid-template-columns:1fr;gap:26px">
         {
           model.kit && (
             <div class="card" style="border-color:rgba(124,123,255,.45)">
-              <div class="family">One-click kit</div>
+              <div class="family">One-click kit · courtesy of Mia's AI Lab</div>
               <h3>{model.kit.name}</h3>
               <p>{model.kit.note}</p>
               <a class="btn btn-primary btn-sm" href={model.kit.url} target="_blank" rel="noopener noreferrer">

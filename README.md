@@ -8,6 +8,8 @@ A curated guide to the best local AI models that actually fit **16 GB of VRAM** 
 
 **[Browse the website ->](https://tespio.github.io/moddle)**
 
+> **HUGE THANKS to [Mia's AI Lab](https://github.com/MiaAI-Lab/Qwen3.8-27B-16gb-NVIDIA-GPUs-one-click-install) ([@MiaAI_lab](https://x.com/MiaAI_lab))** for building the Simplex one-click kit and the EXL3 2.0 bpw quant that make **Qwen3.8-27B run fully on a single 16 GB NVIDIA card** - the standout local-AI achievement this whole repo is built around. Go star their project.
+
 ## Target hardware
 
 Anything with **16 GB of VRAM**, ideally ~32 GB of RAM and an SSD. Cards this covers:
@@ -60,6 +62,7 @@ Anything with **16 GB of VRAM**, ideally ~32 GB of RAM and an SSD. Cards this co
 - [Hardware & VRAM](docs/hardware.md) - the memory math that decides what fits.
 - [Quantization](docs/quantization.md) - GGUF ladders, KV-cache quants, tradeoffs.
 - [EXL3 & ExLlamaV3](docs/exl3.md) - best-in-class low-bit quants and one-click kits.
+- [Offloading](docs/offloading.md) - run bigger models via CPU/RAM and MoE expert offload.
 - [Tuning for 16 GB](docs/tuning.md) - context, offload, OOM troubleshooting.
 - [Runtimes](docs/runtimes.md) - Ollama, LM Studio, llama.cpp, vLLM/SGLang, ComfyUI.
 
@@ -74,6 +77,16 @@ Everything here is generated from [`data/models.json`](data/models.json):
 
 Add or fix a model in the JSON, run the script, and the docs update.
 See [CONTRIBUTING.md](CONTRIBUTING.md) to help.
+
+## Credits
+
+This project would not exist without the people who actually build and quantize the models. In particular:
+
+- **Mia's AI Lab (MiaAI-Lab)** (@MiaAI_lab) - Qwen3.8-27B on 16 GB - EXL3 quants + one-click installer. HUGE thanks. Mia's AI Lab built the Simplex serving kit and the 2.0 bpw EXL3 quant that make Qwen3.8-27B run fully on a single 16 GB NVIDIA card, with the 16 GB profile table and quality measurements this repo relies on.
+- **turboderp** (@turboderp) - EXL3 quantization format and the ExLlamaV3 engine. Author of ExLlamaV3 and the EXL3 quants (2.5 bpw and up) used here.
+- **model authors** - The open-weight models themselves. Qwen, Google DeepMind, Mistral AI, OpenAI, Meta, DeepSeek, Zhipu AI, Liquid AI, Stability AI, Black Forest Labs, BAAI, Nomic, OpenBMB and the rest.
+
+**Mia's AI Lab:** <https://github.com/MiaAI-Lab/Qwen3.8-27B-16gb-NVIDIA-GPUs-one-click-install>
 
 ## Disclaimer
 

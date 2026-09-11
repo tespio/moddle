@@ -20,6 +20,15 @@ export interface Kit {
   note: string;
 }
 
+export interface Credit {
+  name: string;
+  handle: string;
+  url: string;
+  role: string;
+  note: string;
+  featured: boolean;
+}
+
 export interface Model {
   id: string;
   name: string;
@@ -66,6 +75,7 @@ interface Dataset {
   hardware: Hardware;
   categories: Category[];
   models: Model[];
+  credits?: Credit[];
 }
 
 export const dataset = raw as unknown as Dataset;
@@ -73,6 +83,8 @@ export const models: Model[] = dataset.models;
 export const categories: Category[] = dataset.categories;
 export const hardware: Hardware = dataset.hardware;
 export const meta = dataset.meta;
+export const credits: Credit[] = dataset.credits ?? [];
+export const featuredCredit: Credit | undefined = credits.find((c) => c.featured);
 
 export const fitLabels: Record<string, string> = {
   full: 'Fits fully',

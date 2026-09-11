@@ -119,7 +119,9 @@ dense 24B model.
 
 ## System RAM and offload
 
-Your 32 GB DDR5 is a useful overflow, not a substitute for VRAM. When offloading:
+Your 32 GB DDR5 is a useful overflow, not a substitute for VRAM. The full
+playbook — CPU layers, MoE expert offload, KV offload, and the Windows
+shared-memory trap — lives in **[Offloading](offloading.md)**. Short version:
 
 - Keep as many layers on the GPU as possible (`-ngl` in llama.cpp).
 - Expect a large speed drop once weights stream over PCIe.

@@ -1002,6 +1002,74 @@ input[type='range'] {
   gap: 16px;
 }
 
+/* ---------------------------------------------------------- credits */
+.credit-hero {
+  position: relative;
+  padding: clamp(22px, 4vw, 34px);
+  border-radius: var(--radius);
+  border: 1px solid rgba(124, 123, 255, 0.5);
+  background: linear-gradient(
+    135deg,
+    rgba(124, 123, 255, 0.2),
+    rgba(34, 211, 238, 0.1) 55%,
+    rgba(244, 114, 182, 0.14)
+  );
+  box-shadow: 0 30px 90px -45px rgba(124, 123, 255, 0.95);
+  overflow: hidden;
+}
+
+.credit-hero::after {
+  content: '';
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  right: -120px;
+  top: -160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.35), transparent 65%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.credit-hero .thanks {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+
+.credit-hero h3 {
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  margin: 10px 0 0;
+}
+
+.credit-hero p {
+  color: #d8dbe8;
+  margin: 12px 0 0;
+  max-width: 74ch;
+}
+
+.credit-hero .actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.credits-list {
+  display: grid;
+  gap: 14px;
+}
+
+.credits-list .card.featured {
+  border-color: rgba(124, 123, 255, 0.5);
+  background: linear-gradient(135deg, rgba(124, 123, 255, 0.1), var(--surface));
+}
+
 /* ---------------------------------------------------------- misc */
 .stack-sm > * + * {
   margin-top: 8px;

@@ -81,6 +81,7 @@ $pages = @{
     'docs/index.html'                  = 'Guides'
     'docs/hardware/index.html'         = 'usable'
     'docs/exl3/index.html'             = 'ExLlamaV3'
+    'docs/offloading/index.html'       = 'offload'
     'docs/tuning/index.html'           = 'OOM'
 }
 foreach ($rel in $pages.Keys) {
@@ -136,6 +137,7 @@ if (-not $SkipPreview) {
                     '/docs/',
                     '/docs/quantization/',
                     '/docs/exl3/',
+                    '/docs/offloading/',
                     '/sitemap-index.xml',
                     '/favicon.svg'
                 )

@@ -4,6 +4,8 @@ import Hero from '../components/Hero.astro';
 import Icon from '../components/Icon.astro';
 import ModelTable from '../components/ModelTable.astro';
 import VramCalculator from '../components/VramCalculator.astro';
+import CreditBanner from '../components/CreditBanner.astro';
+import Credits from '../components/Credits.astro';
 import { categories, byCategory, topPicks } from '../lib/models';
 import { withBase } from '../lib/site';
 
@@ -26,6 +28,8 @@ const picks = topPicks([
 
 <Base>
   <Hero />
+
+  <CreditBanner />
 
   <section class="section" id="categories">
     <div class="container">
@@ -96,4 +100,6 @@ const picks = topPicks([
       </div>
     </div>
   </section>
+
+  <Credits />
 </Base>

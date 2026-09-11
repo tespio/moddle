@@ -8,6 +8,13 @@ size.
 
 If GGUF is the universal format, EXL3 is the one tuned for your 16 GB Nvidia card.
 
+> **HUGE THANKS to [Mia's AI Lab](https://github.com/MiaAI-Lab/Qwen3.8-27B-16gb-NVIDIA-GPUs-one-click-install)
+> ([@MiaAI_lab](https://x.com/MiaAI_lab)).** They built the **Simplex one-click
+> installer** and the **2.0 bpw EXL3 quant** that make **Qwen3.8-27B run fully on
+> a single 16 GB NVIDIA card**, and published the 16 GB profile table and quality
+> measurements this guide is built on. If this page helps you, go star their
+> project — they did the hard part.
+
 ## Why it matters here
 
 A GGUF Q4 27B model is ~16 GB of weights — it does not fit, so you offload and
@@ -56,7 +63,7 @@ ExLlamaV3 itself is the engine (v1.4.4 for the quantized vision tower). It ships
 prebuilt CUDA wheels, so you do not need the CUDA Toolkit or Visual Studio Build
 Tools.
 
-## The one-click kit (recommended)
+## The one-click kit (by Mia's AI Lab) — huge thanks
 
 If you just want Qwen3.8-27B running on a 16 GB card, use **Simplex**, a serving
 kit by Mia's AI Lab:

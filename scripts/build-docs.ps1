@@ -182,6 +182,8 @@ $r = New-Object System.Text.StringBuilder
 [void]$r.AppendLine()
 [void]$r.AppendLine("**[Browse the website ->]($SiteUrl)**")
 [void]$r.AppendLine()
+[void]$r.AppendLine("> **HUGE THANKS to [Mia's AI Lab](https://github.com/MiaAI-Lab/Qwen3.8-27B-16gb-NVIDIA-GPUs-one-click-install) ([@MiaAI_lab](https://x.com/MiaAI_lab))** for building the Simplex one-click kit and the EXL3 2.0 bpw quant that make **Qwen3.8-27B run fully on a single 16 GB NVIDIA card** - the standout local-AI achievement this whole repo is built around. Go star their project.")
+[void]$r.AppendLine()
 [void]$r.AppendLine('## Target hardware')
 [void]$r.AppendLine()
 [void]$r.AppendLine("Anything with **$($data.hardware.vramGB) GB of VRAM**, ideally ~$($data.hardware.ramGB) GB of RAM and an SSD. Cards this covers:")
@@ -212,6 +214,7 @@ foreach ($cat in $data.categories) {
 [void]$r.AppendLine('- [Hardware & VRAM](docs/hardware.md) - the memory math that decides what fits.')
 [void]$r.AppendLine('- [Quantization](docs/quantization.md) - GGUF ladders, KV-cache quants, tradeoffs.')
 [void]$r.AppendLine('- [EXL3 & ExLlamaV3](docs/exl3.md) - best-in-class low-bit quants and one-click kits.')
+[void]$r.AppendLine('- [Offloading](docs/offloading.md) - run bigger models via CPU/RAM and MoE expert offload.')
 [void]$r.AppendLine('- [Tuning for 16 GB](docs/tuning.md) - context, offload, OOM troubleshooting.')
 [void]$r.AppendLine('- [Runtimes](docs/runtimes.md) - Ollama, LM Studio, llama.cpp, vLLM/SGLang, ComfyUI.')
 [void]$r.AppendLine()
@@ -226,6 +229,18 @@ foreach ($cat in $data.categories) {
 [void]$r.AppendLine()
 [void]$r.AppendLine('Add or fix a model in the JSON, run the script, and the docs update.')
 [void]$r.AppendLine('See [CONTRIBUTING.md](CONTRIBUTING.md) to help.')
+[void]$r.AppendLine()
+[void]$r.AppendLine('## Credits')
+[void]$r.AppendLine()
+[void]$r.AppendLine("This project would not exist without the people who actually build and quantize the models. In particular:")
+[void]$r.AppendLine()
+foreach ($cr in $data.credits) {
+    $name = "**$($cr.name)**"
+    if ($cr.handle) { $name += " ($($cr.handle))" }
+    [void]$r.AppendLine("- $name - $($cr.role). $($cr.note)")
+}
+[void]$r.AppendLine()
+[void]$r.AppendLine("**Mia's AI Lab:** <$($data.credits[0].url)>")
 [void]$r.AppendLine()
 [void]$r.AppendLine('## Disclaimer')
 [void]$r.AppendLine()

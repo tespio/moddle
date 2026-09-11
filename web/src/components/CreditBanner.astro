@@ -1,0 +1,44 @@
+---
+import { featuredCredit } from '../lib/models';
+
+const c = featuredCredit;
+const handleUrl = c?.handle
+  ? `https://x.com/${c.handle.replace('@', '')}`
+  : c?.url;
+---
+
+{
+  c && (
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <div class="credit-hero">
+          <span class="thanks">★ Huge thanks</span>
+          <h3>
+            {c.name} — {c.role}
+          </h3>
+          <p>{c.note}</p>
+          <div class="actions">
+            <a
+              class="btn btn-primary btn-sm"
+              href={c.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Star their project ↗
+            </a>
+            {c.handle && (
+              <a
+                class="btn btn-ghost btn-sm"
+                href={handleUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {c.handle}
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

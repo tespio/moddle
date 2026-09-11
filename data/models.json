@@ -7,6 +7,32 @@
     "license": { "code": "MIT", "content": "CC-BY-4.0" },
     "note": "VRAM figures are estimates for weights only unless a context is given. KV cache scales with context length. Measured throughput varies by runtime, driver, and settings."
   },
+  "credits": [
+    {
+      "name": "Mia's AI Lab (MiaAI-Lab)",
+      "handle": "@MiaAI_lab",
+      "url": "https://github.com/MiaAI-Lab/Qwen3.8-27B-16gb-NVIDIA-GPUs-one-click-install",
+      "role": "Qwen3.8-27B on 16 GB - EXL3 quants + one-click installer",
+      "note": "HUGE thanks. Mia's AI Lab built the Simplex serving kit and the 2.0 bpw EXL3 quant that make Qwen3.8-27B run fully on a single 16 GB NVIDIA card, with the 16 GB profile table and quality measurements this repo relies on.",
+      "featured": true
+    },
+    {
+      "name": "turboderp",
+      "handle": "@turboderp",
+      "url": "https://github.com/turboderp-org/exllamav3",
+      "role": "EXL3 quantization format and the ExLlamaV3 engine",
+      "note": "Author of ExLlamaV3 and the EXL3 quants (2.5 bpw and up) used here.",
+      "featured": false
+    },
+    {
+      "name": "model authors",
+      "handle": "",
+      "url": "https://huggingface.co/models",
+      "role": "The open-weight models themselves",
+      "note": "Qwen, Google DeepMind, Mistral AI, OpenAI, Meta, DeepSeek, Zhipu AI, Liquid AI, Stability AI, Black Forest Labs, BAAI, Nomic, OpenBMB and the rest.",
+      "featured": false
+    }
+  ],
   "hardware": {
     "gpu": "16 GB VRAM class GPU",
     "vramGB": 16,

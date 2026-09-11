@@ -4,6 +4,10 @@ A practical checklist for getting the most out of a 16 GB card. Most
 "it doesn't fit" problems are actually a context, KV-cache, or overhead problem
 — not a weights problem.
 
+> When a model genuinely does not fit, don't guess: read
+> **[Offloading](offloading.md)**. It covers CPU/RAM offload, MoE expert offload,
+> and the exact flags for every runtime, plus the Windows shared-memory trap.
+
 ## The order of operations
 
 1. **Fit the weights first.** Pick a quant whose weights leave ~2 GB for KV and
